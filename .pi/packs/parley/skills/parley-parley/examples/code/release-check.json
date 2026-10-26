@@ -1,0 +1,60 @@
+{
+  "id": "release-check",
+  "title": "Release check: a failed deploy, read from its output",
+  "summary": "Callouts, a quote, a console session and a service log in one page. Explanatory: no questions.",
+  "created": "2026-10-21",
+  "blocks": [
+    {
+      "id": "intro",
+      "type": "prose",
+      "text": "The 2.4.0 deploy stopped at the migration step. The output below is copied from the run."
+    },
+    {
+      "id": "warn",
+      "type": "prose",
+      "tone": "warn",
+      "text": "Do not re-run the deploy until the lock is released. A second run waits on the same lock."
+    },
+    {
+      "id": "session",
+      "type": "code",
+      "title": "The deploy command",
+      "language": "console",
+      "code": "$ ./deploy --env prod --version 2.4.0\nconnecting to prod-db\nrunning 3 migrations\nwarning: migration 0042 holds a table lock\nerror: migration 0043 timed out after 30s\n$ echo $?\n1",
+      "caption": "Lines that start with `$` are commands."
+    },
+    {
+      "id": "service-log",
+      "type": "code",
+      "title": "The database log",
+      "language": "log",
+      "code": "2026-10-21T09:14:02Z INFO  migrate: start 0042\n2026-10-21T09:14:02Z DEBUG lock: acquire orders\n2026-10-21T09:14:05Z WARN  lock: orders held for 3s\n2026-10-21T09:14:35Z ERROR migrate: 0043 timed out\n2026-10-21T09:14:35Z INFO  migrate: rollback 0043",
+      "caption": "A debug line is dimmed. A warning and an error are coloured."
+    },
+    {
+      "id": "cause",
+      "type": "prose",
+      "tone": "note",
+      "text": "Migration 0042 adds an index without `CONCURRENTLY`, so it blocks writes to `orders`."
+    },
+    {
+      "id": "fix",
+      "type": "prose",
+      "tone": "tip",
+      "text": "Add the index with `CREATE INDEX CONCURRENTLY` and run the migration outside a transaction."
+    },
+    {
+      "id": "danger",
+      "type": "prose",
+      "tone": "danger",
+      "text": "Dropping the lock by killing the session rolls back every open order write."
+    },
+    {
+      "id": "ask",
+      "type": "prose",
+      "tone": "quote",
+      "cite": "the on-call note, 21 Oct",
+      "text": "The deploy is safe to retry once the index is rebuilt. Not before."
+    }
+  ]
+}

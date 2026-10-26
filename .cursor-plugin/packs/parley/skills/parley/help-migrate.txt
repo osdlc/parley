@@ -1,0 +1,6 @@
+check, serve, render, answers: same flags and output, plus a next step and --json.
+answers --json: the digest fields stay at the top level; v, ok, command, warnings and next join them,
+  and the object prints on one line.
+schema <type>: works as before; stderr points to parley block <type>.
+parley with no command: prints the groups and exits 0. It used to print usage and exit 2.
+parley help: lists these topics. It used to print usage.

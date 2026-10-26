@@ -1,0 +1,171 @@
+{
+  "id": "dependency-review",
+  "title": "Dependency update review",
+  "summary": "Tables on one data model: package changes with versions and size, one package's fields, a risk register in groups, and related links. Explanatory: no questions.",
+  "created": "2026-10-21",
+  "blocks": [
+    {
+      "id": "deps",
+      "type": "table",
+      "title": "Dependency changes",
+      "columns": [
+        { "id": "pkg", "title": "Package", "kind": "code" },
+        { "id": "from", "title": "From", "kind": "version" },
+        { "id": "to", "title": "To", "kind": "version" },
+        { "id": "change", "title": "Change", "kind": "state" },
+        { "id": "licence", "title": "Licence" },
+        { "id": "size", "title": "Size", "kind": "bytes" },
+        { "id": "growth", "title": "Size change", "kind": "delta", "unit": "kB", "better": "lower" }
+      ],
+      "states": { "upgraded": "ok", "added": "warn", "removed": "skip", "major": "warn" },
+      "rows": [
+        {
+          "id": "d-esbuild",
+          "cells": {
+            "pkg": "esbuild",
+            "from": "0.27.4",
+            "to": "0.28.2",
+            "change": "upgraded",
+            "licence": "MIT",
+            "size": 9420000,
+            "growth": 120
+          }
+        },
+        {
+          "id": "d-vitest",
+          "cells": {
+            "pkg": "vitest",
+            "from": "3.2.4",
+            "to": "4.1.10",
+            "change": "major",
+            "licence": "MIT",
+            "size": 1830000,
+            "growth": -210
+          },
+          "detail": "Major version: `vi.fn` types changed. The test helpers were updated in the same change.",
+          "href": "https://github.com/vitest-dev/vitest/releases/tag/v4.1.10"
+        },
+        {
+          "id": "d-fastcheck",
+          "cells": {
+            "pkg": "fast-check",
+            "to": "4.10.2",
+            "change": "added",
+            "licence": "MIT",
+            "size": 1120000,
+            "growth": 1120
+          }
+        },
+        {
+          "id": "d-bun-types",
+          "cells": {
+            "pkg": "bun-types",
+            "from": "1.2.20",
+            "change": "removed",
+            "licence": "MIT",
+            "growth": -540
+          }
+        }
+      ],
+      "tally": "change"
+    },
+    {
+      "id": "vitest-fields",
+      "type": "table",
+      "title": "vitest 4.1.10",
+      "layout": "fields",
+      "columns": [
+        { "id": "registry", "title": "Registry", "kind": "link" },
+        { "id": "published", "title": "Published", "kind": "date" },
+        { "id": "deps", "title": "Dependencies", "kind": "number" },
+        { "id": "unpacked", "title": "Unpacked size", "kind": "bytes" },
+        { "id": "engines", "title": "Engines", "kind": "code" }
+      ],
+      "rows": [
+        {
+          "id": "vf",
+          "title": "vitest",
+          "cells": {
+            "registry": "https://www.npmjs.com/package/vitest",
+            "published": "2026-09-30",
+            "deps": 18,
+            "unpacked": 1830000,
+            "engines": "node >=20"
+          }
+        }
+      ]
+    },
+    {
+      "id": "risks",
+      "type": "table",
+      "title": "Risk register",
+      "columns": [
+        { "id": "risk", "title": "Risk" },
+        { "id": "likelihood", "title": "Likelihood", "kind": "state" },
+        { "id": "impact", "title": "Impact", "kind": "state" },
+        { "id": "owner", "title": "Owner" },
+        { "id": "mitigation", "title": "Mitigation" }
+      ],
+      "states": { "low": "ok", "medium": "warn", "high": "bad" },
+      "groups": [
+        { "id": "rg-build", "title": "Build", "rows": ["r-esbuild", "r-bundle"] },
+        { "id": "rg-test", "title": "Tests", "rows": ["r-vitest"] }
+      ],
+      "rows": [
+        {
+          "id": "r-esbuild",
+          "cells": {
+            "risk": "esbuild output changes the bundle hash",
+            "likelihood": "medium",
+            "impact": "low",
+            "owner": "build",
+            "mitigation": "The size check compares gzip bytes, not hashes."
+          }
+        },
+        {
+          "id": "r-bundle",
+          "cells": {
+            "risk": "fast-check lands in the shipped bundle",
+            "likelihood": "low",
+            "impact": "high",
+            "owner": "build",
+            "mitigation": "It is a dev dependency; bundle:check fails on an import from src."
+          }
+        },
+        {
+          "id": "r-vitest",
+          "cells": {
+            "risk": "vitest 4 runs tests in a new order and hides a shared-state bug",
+            "likelihood": "medium",
+            "impact": "medium",
+            "owner": "tests",
+            "mitigation": "Run the suite with --sequence.shuffle twice before merge."
+          }
+        }
+      ]
+    },
+    {
+      "id": "links",
+      "type": "table",
+      "title": "Related",
+      "columns": [
+        { "id": "what", "title": "What", "kind": "link" },
+        { "id": "state", "title": "State", "kind": "state" }
+      ],
+      "states": { "open": "warn", "merged": "ok", "closed": "skip" },
+      "rows": [
+        {
+          "id": "l-pr",
+          "cells": {
+            "what": { "value": "This update", "href": "https://github.com/acme/shop/pull/231" },
+            "state": "merged"
+          }
+        },
+        {
+          "id": "l-lock",
+          "cells": { "what": { "value": "Lockfile", "href": "bun.lock" }, "state": "open" }
+        }
+      ]
+    }
+  ]
+}

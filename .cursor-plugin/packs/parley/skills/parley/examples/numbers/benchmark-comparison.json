@@ -1,0 +1,96 @@
+{
+  "id": "benchmark-comparison",
+  "title": "Checkout benchmarks: main against the new index",
+  "summary": "One table of benchmark results drawn two ways: grouped bars compare main with the PR, and a line shows the nightly p95 against its budget. Example data for a performance review.",
+  "created": "2026-10-21",
+  "blocks": [
+    {
+      "id": "why",
+      "type": "prose",
+      "title": "What was measured",
+      "text": "Five checkout scenarios ran 200 times each on `main` and on this branch. The table holds the numbers. The first chart draws the same table, so the bars and the cells cannot drift apart. The second chart is the nightly p95 for the last eight days, with the latency budget as a line."
+    },
+    {
+      "id": "bench",
+      "type": "table",
+      "title": "Median latency by scenario",
+      "columns": [
+        { "id": "scenario", "title": "Scenario" },
+        { "id": "main", "title": "main", "kind": "duration", "unit": "ms" },
+        { "id": "pr", "title": "PR", "kind": "duration", "unit": "ms" },
+        { "id": "change", "title": "Change", "kind": "delta", "unit": "ms", "better": "lower" }
+      ],
+      "rows": [
+        { "id": "cart", "cells": { "scenario": "Open cart", "main": 82, "pr": 79, "change": -3 } },
+        {
+          "id": "quote",
+          "cells": { "scenario": "Get quote", "main": 148, "pr": 91, "change": -57 }
+        },
+        { "id": "pay", "cells": { "scenario": "Pay", "main": 236, "pr": 152, "change": -84 } },
+        {
+          "id": "confirm",
+          "cells": { "scenario": "Confirm order", "main": 120, "pr": 126, "change": 6 }
+        },
+        {
+          "id": "history",
+          "cells": { "scenario": "Order history", "main": 310, "pr": 188, "change": -122 }
+        }
+      ]
+    },
+    {
+      "id": "compare",
+      "type": "chart",
+      "title": "Main against the PR, by scenario",
+      "mark": "bar",
+      "data": "bench",
+      "x": "scenario",
+      "y": ["main", "pr"],
+      "lines": [{ "id": "budget", "title": "budget 250 ms", "at": 250 }]
+    },
+    {
+      "id": "nightly",
+      "type": "chart",
+      "title": "Nightly p95 latency",
+      "mark": "line",
+      "x": "day",
+      "y": ["checkout", "search"],
+      "columns": [
+        { "id": "day", "title": "Night" },
+        { "id": "checkout", "title": "Checkout", "kind": "duration", "unit": "ms" },
+        { "id": "search", "title": "Search", "kind": "duration", "unit": "ms" }
+      ],
+      "rows": [
+        { "id": "d1", "cells": { "day": "Oct 14", "checkout": 231, "search": 118 } },
+        { "id": "d2", "cells": { "day": "Oct 15", "checkout": 224, "search": 121 } },
+        { "id": "d3", "cells": { "day": "Oct 16", "checkout": 219, "search": 117 } },
+        { "id": "d4", "cells": { "day": "Oct 17", "checkout": 212, "search": 124 } },
+        { "id": "d5", "cells": { "day": "Oct 18", "checkout": 151, "search": 119 } },
+        { "id": "d6", "cells": { "day": "Oct 19", "checkout": 148, "search": 122 } },
+        { "id": "d7", "cells": { "day": "Oct 20", "checkout": 149, "search": 140 } },
+        { "id": "d8", "cells": { "day": "Oct 21", "checkout": 146, "search": 143 } }
+      ],
+      "bands": [{ "id": "target", "title": "target range", "from": 100, "to": 160 }],
+      "lines": [{ "id": "limit", "title": "budget 200 ms", "at": 200 }]
+    },
+    {
+      "id": "share",
+      "type": "chart",
+      "title": "Where the Pay scenario spends its time",
+      "mark": "bar",
+      "stack": true,
+      "horizontal": true,
+      "x": "run",
+      "y": ["db", "app", "net"],
+      "columns": [
+        { "id": "run", "title": "Run" },
+        { "id": "db", "title": "Database", "kind": "duration", "unit": "ms" },
+        { "id": "app", "title": "App", "kind": "duration", "unit": "ms" },
+        { "id": "net", "title": "Network", "kind": "duration", "unit": "ms" }
+      ],
+      "rows": [
+        { "id": "r-main", "cells": { "run": "main", "db": 140, "app": 62, "net": 34 } },
+        { "id": "r-pr", "cells": { "run": "PR", "db": 58, "app": 61, "net": 33 } }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "parley",
+  "interface": {
+    "displayName": "parley"
+  },
+  "plugins": [
+    {
+      "name": "parley",
+      "source": {
+        "source": "local",
+        "path": "./.agents/packs/parley"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

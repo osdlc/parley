@@ -1,0 +1,170 @@
+{
+  "id": "pr-checks",
+  "title": "PR checks: tests, CI jobs and coverage",
+  "summary": "Tables on one data model: test results with a tally and the change against main, CI jobs with links to their logs, coverage per package with bars, and the endpoints the change touches.",
+  "created": "2026-10-21",
+  "blocks": [
+    {
+      "id": "intro",
+      "type": "prose",
+      "text": "The checks for the answers-sync change. Comment on a row, or on one cell, to ask about it."
+    },
+    {
+      "id": "tests",
+      "type": "table",
+      "title": "Test results",
+      "columns": [
+        { "id": "suite", "title": "Suite" },
+        { "id": "result", "title": "Result", "kind": "state" },
+        { "id": "tests", "title": "Tests", "kind": "number" },
+        { "id": "time", "title": "Time", "kind": "duration" },
+        { "id": "change", "title": "vs main", "kind": "delta", "unit": "s", "better": "lower" }
+      ],
+      "rows": [
+        {
+          "id": "t-unit",
+          "cells": {
+            "suite": "unit",
+            "result": "pass",
+            "tests": 1284,
+            "time": 12.4,
+            "change": -0.8
+          }
+        },
+        {
+          "id": "t-e2e",
+          "cells": {
+            "suite": "e2e",
+            "result": "fail",
+            "tests": 212,
+            "time": 81,
+            "change": { "value": 6.2, "note": "Two retries of the same spec." }
+          },
+          "detail": "`answers.spec.ts:40` times out waiting for the send. The server answers after 5 s; the test waits 4 s."
+        },
+        {
+          "id": "t-fuzz",
+          "cells": { "suite": "fuzz", "result": "skip", "tests": 0, "time": 0 },
+          "detail": "Runs nightly only."
+        },
+        {
+          "id": "t-a11y",
+          "cells": { "suite": "a11y", "result": "pass", "tests": 46, "time": 19.6, "change": 0 }
+        }
+      ],
+      "tally": "result"
+    },
+    {
+      "id": "ci",
+      "type": "table",
+      "title": "CI jobs",
+      "columns": [
+        { "id": "job", "title": "Job" },
+        { "id": "state", "title": "State", "kind": "state" },
+        { "id": "time", "title": "Duration", "kind": "duration" },
+        { "id": "log", "title": "Log", "kind": "link" }
+      ],
+      "states": { "success": "ok", "failure": "bad", "cancelled": "skip" },
+      "rows": [
+        {
+          "id": "j-lint",
+          "cells": {
+            "job": "lint",
+            "state": "success",
+            "time": 48,
+            "log": "https://github.com/acme/shop/actions/runs/1001/job/1"
+          }
+        },
+        {
+          "id": "j-test",
+          "cells": {
+            "job": "test",
+            "state": "failure",
+            "time": 412,
+            "log": {
+              "value": "e2e log",
+              "href": "https://github.com/acme/shop/actions/runs/1001/job/2"
+            }
+          }
+        },
+        {
+          "id": "j-deploy",
+          "cells": { "job": "deploy-preview", "state": "cancelled", "time": 3 }
+        }
+      ],
+      "sort": { "column": "state" }
+    },
+    {
+      "id": "coverage",
+      "type": "table",
+      "title": "Line coverage by package",
+      "columns": [
+        { "id": "pkg", "title": "Package", "kind": "code" },
+        { "id": "lines", "title": "Lines", "kind": "percent" },
+        { "id": "change", "title": "vs main", "kind": "delta", "unit": "%", "better": "higher" }
+      ],
+      "rows": [
+        { "id": "c-lib", "cells": { "pkg": "src/lib", "lines": 91.2, "change": 0.4 } },
+        { "id": "c-blocks", "cells": { "pkg": "src/blocks", "lines": 86.5, "change": -1.3 } },
+        { "id": "c-commands", "cells": { "pkg": "src/commands", "lines": 72.8, "change": 2.1 } }
+      ],
+      "sort": { "column": "lines", "order": "desc" }
+    },
+    {
+      "id": "endpoints",
+      "type": "table",
+      "title": "Endpoints the change touches",
+      "columns": [
+        { "id": "method", "title": "Method", "kind": "code" },
+        { "id": "path", "title": "Path", "kind": "code" },
+        { "id": "change", "title": "Change", "kind": "state" },
+        { "id": "auth", "title": "Auth" }
+      ],
+      "states": { "added": "ok", "changed": "warn", "removed": "bad" },
+      "rows": [
+        {
+          "id": "e-events",
+          "title": "GET /d/:id/events",
+          "cells": {
+            "method": "GET",
+            "path": "/d/:id/events",
+            "change": "changed",
+            "auth": "none (local)"
+          },
+          "detail": "Now takes `?since=<cursor>` and sends only the changes after it."
+        },
+        {
+          "id": "e-answers",
+          "title": "POST /d/:id/answers",
+          "cells": {
+            "method": "POST",
+            "path": "/d/:id/answers",
+            "change": "added",
+            "auth": "none (local)"
+          }
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "q-retry",
+      "prompt": "Raise the e2e send timeout, or make the server answer sooner?",
+      "about": "t-e2e",
+      "kind": "single",
+      "options": [
+        {
+          "id": "timeout",
+          "title": "Raise the test timeout to 8 s",
+          "detail": "One line, but every send still waits on the disk write."
+        },
+        {
+          "id": "server",
+          "title": "Answer the send before the write lands",
+          "detail": "The page gets its answer at once; the write finishes behind it, under the same lock."
+        }
+      ],
+      "recommended": "server"
+    }
+  ]
+}

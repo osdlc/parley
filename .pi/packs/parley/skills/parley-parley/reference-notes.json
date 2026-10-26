@@ -1,0 +1,531 @@
+{
+  "PART_NOTES": {
+    "document": {
+      "about": "The JSON file an agent writes, `<id>.json`. It holds the blocks in reading order and any questions that are not in a block.",
+      "fields": {
+        "id": "The file name without `.json`. Lowercase letters, digits and hyphens. Answers key on it.",
+        "title": "The heading of the page.",
+        "summary": "One or two lines under the title.",
+        "created": "Required. The date, written `YYYY-MM-DD`. `check` fails when it is missing or empty. It does not read the format.",
+        "author": "Who wrote the document.",
+        "author.agent": "The agent, for example its model id.",
+        "author.session": "The session it ran in.",
+        "repo": "The repository that `source` paths point into. Needed for GitHub links.",
+        "repo.remote": "The http(s) address of the repository, for example `https://github.com/owner/name`.",
+        "repo.commit": "The commit the sources were read at, 7 to 40 hex characters. Links pin to it.",
+        "questions": "Questions not placed in a block. All show in the Questions tab; one with `about` is also linked from that item.",
+        "revision": "A whole number from 1. Raise it each time you revise the questions. Answers record the revision they were given at.",
+        "storybook": "The http(s) address stories load from, for example `http://localhost:6006`.",
+        "storybookStart": "The command that starts Storybook. The page shows it when Storybook is down.",
+        "blocks": "The blocks, in reading order. At least one. One `prose` block is a whole document."
+      }
+    },
+    "block": {
+      "about": "The fields every block has, beside the fields of its type.",
+      "fields": {
+        "id": "Unique id across the document. It must not be an `Object.prototype` property name such as `constructor`. Keep it when you revise: comments key on it.",
+        "type": "The block type, for example `prose` or `matrix`.",
+        "title": "A heading above the block.",
+        "source": "Where the block lives in code. See {source}."
+      }
+    },
+    "question": {
+      "about": "A decision the agent needs from the reviewer. It goes in the document `questions` or in a `question` block.",
+      "fields": {
+        "id": "Unique id across the document. Answers key on it, so never reuse or rename it.",
+        "source": "Where the thing it asks about lives in code. See {source}.",
+        "stories": "Live Storybook stories shown with the question. A string is a story id.",
+        "shots": "Screenshots or short videos shown with the question. A string is a path.",
+        "prompt": "The question, as the reviewer reads it.",
+        "kind": "`single` (pick one option), `multi` (pick any) or `text` (free text, no options). A free-text answer goes to the agent with the verdict, like a chosen option.",
+        "options": "The answers it offers. Required unless `kind` is `text`, and not allowed then.",
+        "recommended": "The id of the option you suggest. It shows first and marked. Say why in its `detail`.",
+        "about": "The id of the item it is about. The question form is in the Questions tab, with a \"see\" link to the item. The item's Threads section links to the question, if the item has a section of its own: a `prose` block, a matrix row, a table, an operation. If `about` names a block with several sections, or an item with no section, `check` warns and nothing links to the question but the Questions tab and the meter. Without `about` the same holds.",
+        "group": "A heading shown on the question's card in the Questions tab.",
+        "status": "`open` or `closed`. Default `open`. A closed question shows its `resolution`.",
+        "resolution": "One line on how a closed question was settled.",
+        "priority": "`blocking`, `high`, `normal` or `low`. Default `normal`. Use `blocking` when you cannot go on without the answer: it is listed first and Finish review warns while it has none. A `high` question is marked and listed next in the Questions tab and the question meter, and `parley answers` carries the priority; a `low` one is shown quietly. Changing it does not make an answer out of date."
+      }
+    },
+    "option": {
+      "about": "One answer a question offers.",
+      "fields": {
+        "id": "Unique within its question. The answers file records it when chosen. `__ask` is reserved.",
+        "source": "Where this option lives in code. See {source}.",
+        "stories": "Live Storybook stories for this option. Options with media show side by side.",
+        "shots": "Screenshots or short videos for this option.",
+        "title": "The option, in a few words.",
+        "detail": "Why one would pick it, and what it costs."
+      }
+    },
+    "story": {
+      "about": "A live Storybook story, written as an object. A plain string is the same as `{\"id\": \"<string>\"}`.",
+      "fields": {
+        "id": "The story id as `<storybook>/index.json` lists it, for example `explore-file-view--tabs-today`.",
+        "title": "A caption for the frame.",
+        "globals": "Storybook globals, for example `theme:dark`.",
+        "height": "Frame height in pixels. Default 480.",
+        "width": "The width the story lays out at, in pixels. Default 1440. The page scales it to fit.",
+        "storybook": "This story's Storybook address, when it is not the document's `storybook`."
+      }
+    },
+    "shot": {
+      "about": "A screenshot or a short video (`.webm`, `.mp4`), written as an object. A plain string is the same as `{\"path\": \"<string>\"}`.",
+      "fields": {
+        "path": "`x/<file>` in the `x/` folder beside the document, or a path from the repository root. The file must exist.",
+        "caption": "A line under the image.",
+        "id": "Names the shot so its regions have node ids. Only in a `story` block; needed when the shot has regions. Lower case letters, digits and dashes.",
+        "regions": "Boxes the agent marks on the image, each one a node a reviewer comments on. Only in a `story` block; not on a video.",
+        "regions[].id": "Lower case letters, digits and dashes. The comment node is `<owner id>.<this id>`.",
+        "regions[].title": "A short name, shown on the box and in the image's details.",
+        "regions[].box": "Where the box is, as fractions of the image width and height from 0 to 1, so it stays right when the image is scaled.",
+        "regions[].box.x": "Left edge, 0 to 1.",
+        "regions[].box.y": "Top edge, 0 to 1.",
+        "regions[].box.w": "Width, above 0. `x + w` must not pass 1.",
+        "regions[].box.h": "Height, above 0. `y + h` must not pass 1.",
+        "regions[].detail": "A line or two in the image's details: what to look at here."
+      }
+    }
+  },
+  "BLOCK_NOTES": {
+    "prose": {
+      "about": "A few paragraphs of text. One item. A document can be a single long `prose` block. The page renders only this. A blank line starts a new paragraph. Inline code goes in backticks. Bold is `**bold**`. Links are `[label](link)`. Wikilinks are `[[wikilinks]]`. A bullet list is a paragraph where every line starts with `- `. A line of text above the dashes makes the whole paragraph plain text. A table is a paragraph of pipe rows: a header row, a delimiter row such as `| --- | :-: | --: |` (colons set the column alignment) and then the body rows, with a blank line before it; a line of text above it makes the paragraph plain text, a delimiter row with a different number of cells does too, and `\\|` is a literal pipe in a cell. Cells take inline code, bold, links and wikilinks. Comments and replies on the page render the same subset. Headings, `*italic*`, numbered lists and nested lists show as typed. Code fences do not render: their backticks become empty code spans. Use a `code` block to show a listing. Use the block `title` for a heading. A single line break inside a paragraph becomes a space. The markdown export (`render --out x.md`) pastes the text as written, so there headings and fences work.",
+      "fields": {
+        "text": "The text.",
+        "tone": "How the block looks. `note`, `tip`, `warn` and `danger` make a callout: a coloured edge and a label (Note, Tip, Warning, Danger) so the meaning is not colour alone. `quote` makes a quotation. Without it the block is plain paragraphs. Inline code, bold and links work in all of them.",
+        "cite": "The source of a quote: a person, an issue or a spec. Only with `tone: \"quote\"`. Shown under the quote after a dash. Inline code, bold and links work."
+      }
+    },
+    "heading": {
+      "about": "A heading that starts a section of the document. One item. The blocks after it belong to the section until the next heading at the same or a higher level, so a level 2 heading after a level 1 heading starts a section inside it. The contents tree nests each section and folds it, and each row shows how many open questions and threads it holds. `title` is required here. The heading is an item like any other: the reader can select it and comment on it, and a question can be `about` it. The markdown export writes it as a heading one level above the blocks under it.",
+      "fields": {
+        "level": "The depth: 1 (the default) for a top section, 2 and 3 for sections inside one."
+      }
+    },
+    "code": {
+      "about": "A short piece of code shown exactly as written: a signature, a doc comment or a usage example. One item. Line breaks, indentation, tabs and blank lines stay as given, and nothing in it is read as markdown or HTML. Long lines scroll sideways. The block has a Copy button, and the markdown export writes it as a fenced code block. Use `annotated-text` for code with numbered notes, and `diff` for a change. With a `source` that has a `range`, the lines are numbered from its start; with a GitHub `repo`, each number links to its line at `repo.commit`.",
+      "fields": {
+        "code": "The code, as written. Must not be blank.",
+        "language": "A short language name such as `ts`, `py` or `sql`. It colours the code and labels the fence in the markdown export. `console` marks `$ `, `% `, `> ` and `PS …>` prompt lines and colours output lines that name an error or a warning. `log` dims the leading time, makes the level word (ERROR, WARN, INFO, DEBUG, TRACE) bold, colours error and warn lines and dims debug and trace lines. A name with no colour rules shows plain. Up to 20 letters, digits or `+ # . -`.",
+        "caption": "Prose under the listing: what it is for. Inline code and bold work."
+      }
+    },
+    "figure": {
+      "about": "One image with a caption: a mockup, a screenshot, a chart. One item.",
+      "fields": {
+        "src": "`x/<file>` in the `x/` folder beside the document, or a path from the repository root. The file must exist.",
+        "alt": "What the image shows, for someone who cannot see it.",
+        "caption": "A line under the image.",
+        "detail": "Text folded under the block in the reading: what to look at and why.",
+        "href": "An http(s) page with the live version, for example the mockup the image came from.",
+        "regions": "Boxes the agent marks on the image, each one a node `<figure id>.<region id>` a reviewer comments on. Drawn faint, and labelled on hover, focus or selection.",
+        "regions[].id": "Lower case letters, digits and dashes. The comment node is `<owner id>.<this id>`.",
+        "regions[].title": "A short name, shown on the box and in the image's details.",
+        "regions[].box": "Where the box is, as fractions of the image width and height from 0 to 1, so it stays right when the image is scaled.",
+        "regions[].box.x": "Left edge, 0 to 1.",
+        "regions[].box.y": "Top edge, 0 to 1.",
+        "regions[].box.w": "Width, above 0. `x + w` must not pass 1.",
+        "regions[].box.h": "Height, above 0. `y + h` must not pass 1.",
+        "regions[].detail": "A line or two in the image's details: what to look at here."
+      }
+    },
+    "story": {
+      "about": "Live Storybook stories and screenshots side by side. One item. Needs at least one story or shot.",
+      "fields": {
+        "stories": "Live Storybook stories. A string is a story id.",
+        "shots": "Screenshots or short videos. A string is a path.",
+        "caption": "A line under the frames.",
+        "detail": "Text folded under the block in the reading: what to look at."
+      }
+    },
+    "question": {
+      "about": "One or more questions placed in the reading column at this point, next to what they decide. One item.",
+      "fields": {
+        "questions": "The questions. At least one."
+      }
+    },
+    "annotated-text": {
+      "about": "Any text with numbered steps anchored into it: a SQL query, a function, a config file. One item per step.",
+      "fields": {
+        "language": "The language of `text`. Keywords are coloured for `sql`, `ts`, `js`, `py`, `rust` and `go`.",
+        "text": "The text the steps point into.",
+        "steps": "The steps, in reading order. At least one.",
+        "steps[].title": "The step name.",
+        "steps[].anchor": "Where the step sits in `text`. Prefer `TextQuoteSelector`: quoting is easier than counting.",
+        "steps[].anchor.type": "Which kind of anchor.",
+        "steps[].anchor.exact": "With `TextQuoteSelector`: the exact words from `text`. They must appear in it as written.",
+        "steps[].anchor.prefix": "With `TextQuoteSelector`: the text just before the quote, when the quote appears more than once.",
+        "steps[].anchor.suffix": "With `TextQuoteSelector`: the text just after the quote, when the quote appears more than once.",
+        "steps[].anchor.start": "With `TextPositionSelector`: the first character, counted in UTF-16 units from 0. An emoji counts as two.",
+        "steps[].anchor.end": "With `TextPositionSelector`: the character after the last one.",
+        "steps[].summary": "One line for the step list.",
+        "steps[].detail": "Paragraphs folded under the item in the reading.",
+        "steps[].touches": "What the step reads or writes. A string, or a table and column.",
+        "steps[].touches[].table": "The table.",
+        "steps[].touches[].column": "The column.",
+        "steps[].cost": "What the step costs.",
+        "steps[].cost.rows": "About how many rows it reads.",
+        "steps[].cost.detail": "A line on the cost.",
+        "steps[].warnings": "Things to watch for, one per line.",
+        "steps[].verbatim": "True when the anchored text is a copy of the lines `source` names. Needs `source` as one repo path with a `range`. `check` compares the copy with the file at `repo.commit`, ignoring indent and trailing space."
+      }
+    },
+    "schema": {
+      "about": "Database tables with their columns, keys and indexes, grouped by domain. One item per table, and one per column for comments. There is no field for a check constraint. Write it in the table `notes` (one line each, shown as a highlighted note under the table), or as a column `flags` entry such as `check: qty > 0` (shown as a chip on the column).",
+      "fields": {
+        "dialect": "The database, for example `postgres`.",
+        "tables": "The tables. At least one.",
+        "tables[].name": "The table name. Columns, keys, indexes and relations name tables by it.",
+        "tables[].schema": "The database schema it is in, for example `public`.",
+        "tables[].purpose": "What the table is for, in a line.",
+        "tables[].columns": "The columns.",
+        "tables[].columns[].id": "Optional. Defaults to `<table id>.<name>`.",
+        "tables[].columns[].name": "The column name.",
+        "tables[].columns[].type": "The column type, as the database writes it.",
+        "tables[].columns[].nullable": "Whether it can be null.",
+        "tables[].columns[].default": "The default value, shown as written.",
+        "tables[].columns[].pk": "Whether it is part of the primary key.",
+        "tables[].columns[].references": "The column it points to.",
+        "tables[].columns[].references.table": "That table, by `name`.",
+        "tables[].columns[].references.column": "That column, by `name`.",
+        "tables[].columns[].flags": "Labels shown as chips, for example `unique`, `indexed`, `generated` or `check: qty > 0`. `unique` also marks the column unique. `check` accepts any text.",
+        "tables[].columns[].purpose": "What the column is for.",
+        "tables[].primaryKey": "Column names in the primary key, when it has more than one.",
+        "tables[].indexes": "The indexes.",
+        "tables[].indexes[].id": "Optional.",
+        "tables[].indexes[].name": "The index name.",
+        "tables[].indexes[].columns": "Column names, in order. Each must be a column of this table.",
+        "tables[].indexes[].unique": "Whether it is unique.",
+        "tables[].indexes[].where": "The condition of a partial index.",
+        "tables[].indexes[].purpose": "What the index is for.",
+        "tables[].rows": "About how many rows the table holds.",
+        "tables[].notes": "Notes, one per line, each shown as a highlighted line under the table. This is the place for a check constraint or any rule the other fields have no slot for.",
+        "relations": "Links between tables. Leave it out to draw them from the columns’ `references`.",
+        "relations[].from": "The column the link starts at.",
+        "relations[].from.table": "The table, by `name`.",
+        "relations[].from.column": "The column, by `name`.",
+        "relations[].to": "The column the link points to.",
+        "relations[].to.table": "The table, by `name`.",
+        "relations[].to.column": "The column, by `name`.",
+        "relations[].cardinality": "`1-1`, `1-n` or `n-n`.",
+        "relations[].detail": "A line on the link.",
+        "groups": "Groups of tables, by domain.",
+        "groups[].title": "The group heading.",
+        "groups[].tables": "Table names in the group."
+      }
+    },
+    "operations": {
+      "about": "Ordered operations, such as the steps of a migration or a deploy, with risk, locks and rollback. One item per operation. `reversible` is required on every operation. When it is `false`, `check` fails unless the operation has a `rollback` that says what undoing it would take.",
+      "fields": {
+        "language": "The language of `code`, for example `sql`.",
+        "operations": "The operations, in order. At least one.",
+        "operations[].kind": "A short category, for example `add-column`, `backfill` or `deploy`.",
+        "operations[].target": "What it acts on, for example a table and column.",
+        "operations[].title": "The operation name.",
+        "operations[].code": "The statement or command.",
+        "operations[].before": "The state before it runs.",
+        "operations[].after": "The state after it runs.",
+        "operations[].detail": "Paragraphs folded under the item in the reading.",
+        "operations[].risk": "`low`, `medium` or `high`.",
+        "operations[].locks": "What it locks, and for how long.",
+        "operations[].reversible": "Required. Whether it can be undone. `false` needs `rollback`.",
+        "operations[].rollback": "How to undo it. Required when `reversible` is false.",
+        "operations[].warnings": "Things to watch for, one per line.",
+        "phases": "Groups of operations. When given, every operation must be in a phase.",
+        "phases[].title": "The phase name.",
+        "phases[].detail": "A line on the phase.",
+        "phases[].ops": "Operation ids in the phase."
+      }
+    },
+    "matrix": {
+      "about": "A grid of rows by columns. Each cell is `valid`, `warn`, `error` or `skip`. `skip` means not applicable or not used: it shows as a dash. `valid` means it works or is used as wanted. `warn` and `error` are problems and need a `reason`. One item per row. A question about a column shows under the first row, with that row's cell for the column.",
+      "fields": {
+        "rowsTitle": "What the rows are, for example `Tool`.",
+        "columnsTitle": "What the columns are, for example `Model family`.",
+        "rows": "The rows. At least one.",
+        "rows[].title": "The row name.",
+        "rows[].detail": "A line on the row.",
+        "columns": "The columns. At least one.",
+        "columns[].title": "The column name.",
+        "columns[].detail": "A line on the column.",
+        "cells": "The cells that are not `default`. Leave it out when every cell is `default`. List a cell as `skip` only when `default` is something else.",
+        "cells[].row": "The row id.",
+        "cells[].column": "The column id.",
+        "cells[].state": "`valid`, `warn`, `error` or `skip`.",
+        "cells[].reason": "Why the cell has that state. Required for `warn` and `error`.",
+        "cells[].hint": "What to do instead, for `warn` or `error`.",
+        "cells[].href": "A link the reader can click, such as a PR. The cell shows a small link icon in its corner (the glyph still selects the row), and its row details list the link. `http:`, `https:`, `mailto:`, a `#anchor` or a repo path; another scheme fails `check`.",
+        "default": "The state of every cell not listed: `valid`, `warn`, `error` or `skip`. Default `skip`, so a cell you do not list is \"not applicable\"."
+      }
+    },
+    "trace": {
+      "about": "One request walked through candidates in order, each with an outcome and a reason. One item per step.",
+      "fields": {
+        "input": "The request, in a line.",
+        "steps": "The candidates, in the order they were tried. At least one.",
+        "steps[].title": "The candidate.",
+        "steps[].outcome": "What happened, for example `chosen`, `skip` or `error`. At most one step may have a good outcome.",
+        "steps[].reason": "Why, in a line.",
+        "steps[].detail": "Paragraphs folded under the item in the reading.",
+        "outcomes": "Colours for outcome words: each word maps to `ok`, `warn`, `bad` or `skip`. Words not listed: `chosen` and `ok` are good, `error` and `fail` bad, `cooling` and `warn` warn, the rest skip."
+      }
+    },
+    "precedence": {
+      "about": "An ordered list where the first match wins, with examples that show which rung each one stops at. One item per rung and per example.",
+      "fields": {
+        "rungs": "The rungs, first match first. At least two.",
+        "rungs[].title": "The rule.",
+        "rungs[].detail": "A line on the rule.",
+        "examples": "Examples that each stop at one rung.",
+        "examples[].title": "The example.",
+        "examples[].matches": "The id of the rung it stops at.",
+        "examples[].reason": "A line on why."
+      }
+    },
+    "plan": {
+      "about": "Phases, workstreams and tasks, each with its gate, milestone and status. One item per phase, workstream and task.",
+      "fields": {
+        "phases": "The phases, in order. At least one.",
+        "phases[].title": "The phase name.",
+        "phases[].detail": "A line on the phase.",
+        "phases[].gate": "What must be true before it starts.",
+        "phases[].milestone": "The milestone it delivers.",
+        "phases[].status": "`todo`, `doing`, `done` or `blocked`.",
+        "phases[].workstreams": "The workstreams in the phase. At least one.",
+        "phases[].workstreams[].title": "The workstream name.",
+        "phases[].workstreams[].detail": "A line on the workstream.",
+        "phases[].workstreams[].tasks": "The tasks. At least one.",
+        "phases[].workstreams[].tasks[].title": "The task name.",
+        "phases[].workstreams[].tasks[].status": "`todo`, `doing`, `done` or `blocked`.",
+        "phases[].workstreams[].tasks[].milestone": "The milestone it delivers.",
+        "phases[].workstreams[].tasks[].gate": "What must be true before it starts.",
+        "phases[].workstreams[].tasks[].detail": "A line on the task."
+      }
+    },
+    "code-flow": {
+      "about": "One path through code across functions and files, drawn as a sequence diagram. One item per step. Use `annotated-text` for one file.",
+      "fields": {
+        "language": "The language of the steps’ `code`.",
+        "entry": "What starts the flow, for example `POST /orders/:id/ship`.",
+        "steps": "The steps, in the order they run. At least two.",
+        "steps[].title": "The step name.",
+        "steps[].symbol": "The function or handler the step runs in. A step needs `symbol` or `source`.",
+        "steps[].kind": "`call`, `branch`, `loop`, `await`, `return`, `emit` or `error`.",
+        "steps[].depth": "Call depth: 0 at the entry, 1 inside what it called, and so on.",
+        "steps[].code": "The lines that matter at this step. Needs `source` to say where they live.",
+        "steps[].summary": "One line for the step list.",
+        "steps[].detail": "Paragraphs folded under the item in the reading.",
+        "steps[].next": "Where control goes next, when not simply the next step.",
+        "steps[].next[].to": "The id of the step it goes to.",
+        "steps[].next[].when": "The condition, for example `order is null`.",
+        "steps[].warnings": "Things to watch for, one per line."
+      }
+    },
+    "workflow": {
+      "about": "A process drawn as a flowchart: steps in order, each in a lane that says who does it, with decisions and hand-offs. One item per step and per lane.",
+      "fields": {
+        "trigger": "What starts it, for example `a PR is opened`.",
+        "lanes": "Who or what does the steps: a role, a team, a system. At least one.",
+        "lanes[].title": "The lane name.",
+        "lanes[].detail": "A line on the lane.",
+        "steps": "The steps, in order. At least two.",
+        "steps[].title": "The step name.",
+        "steps[].lane": "The id of the lane that does it.",
+        "steps[].kind": "`start`, `action`, `decision`, `wait`, `handoff` or `end`. A `decision` names at least two steps in `next`.",
+        "steps[].summary": "One line for the step list.",
+        "steps[].detail": "Paragraphs folded under the item in the reading.",
+        "steps[].next": "Where it goes next, when not simply the next step.",
+        "steps[].next[].to": "The id of the step it goes to.",
+        "steps[].next[].when": "The condition, for example `approved`.",
+        "steps[].duration": "How long it takes, for example `≤ 1 day`.",
+        "steps[].artifacts": "What the step produces, for example a PR or an approval.",
+        "steps[].warnings": "Things to watch for, one per line."
+      }
+    },
+    "diff": {
+      "about": "A unified diff with review findings anchored to its lines. One item per finding. A finding is a part of the diff, so a question about one names the finding id in `about`.",
+      "fields": {
+        "diff": "The diff text, as `git diff` or `gh pr diff` prints it. Every hunk needs its `@@ -a,b +c,d @@` header: `a` and `c` are the first line numbers on the old and new side, `b` and `d` count the lines that follow (context and `-` lines for `b`, context and `+` lines for `d`). Lines before a header do not show and a finding cannot anchor to them. If you have no real numbers, write `@@ -1,N +1,M @@` and count `line` from 1.",
+        "base": "The commit or ref the diff starts from, for example `main`. With a document `repo` and no `pr`, old-side line numbers link to the file at it. Write a commit sha: a branch moves, so its links drift or break. A label that is not a commit or ref name warns and leaves those lines unlinked.",
+        "head": "The commit or ref the diff ends at. With a document `repo` and no `pr`, new-side line numbers link to the file at it (else at `repo.commit`). Write a commit sha: a branch moves, so its links drift or break. A label that is not a commit or ref name warns, and those lines link at `repo.commit`.",
+        "pr": "The pull request number the diff is from. With a GitHub `repo`, each line number links to that line in the pull request's file diff, and the markdown export links the pull request.",
+        "findings": "The findings. The key is required, but the list may be empty: the diff then shows with no findings.",
+        "findings[].title": "The finding, in a few words.",
+        "findings[].file": "The file path as the diff shows it: the new path, or the old path for a deleted file.",
+        "findings[].line": "The first line, counted from 1 on `side`. It must sit in a hunk of that file.",
+        "findings[].endLine": "The last line, for a range in the same hunk.",
+        "findings[].side": "`new` or `old`. Default `new`. Lines of a deleted file are `old`.",
+        "findings[].severity": "Your scale, for example `blocker`, `major`, `minor` or `nit`.",
+        "findings[].category": "What it is about, for example `naming` or `tests`.",
+        "findings[].summary": "One line for the finding list.",
+        "findings[].detail": "Paragraphs folded under the item in the reading.",
+        "findings[].suggestion": "Replacement text for the anchored lines.",
+        "findings[].warnings": "Things to watch for, one per line.",
+        "severities": "Colours for severity words: each word maps to `ok`, `warn`, `bad` or `skip`. Words not listed: `violation`, `blocker`, `critical`, `high` and `error` are bad; `tension`, `major`, `medium` and `warning` warn; `praise` and `good` are ok; the rest skip."
+      }
+    },
+    "checklist": {
+      "about": "Items with a state: acceptance criteria, a checklist, or progress per milestone. Give `items` for a flat list, or `groups` for a bar per group and a total. One item per group and per item. The agent sets each state; the reviewer comments on an item or a group (in `progress` layout, on a group only). A group bar shows the weighted share of its items that are done, in whole percent; `skip` items are left out, and 100% shows only when every counted item is done. The bar also shows `doing` and `blocked` shares, and the state word is always printed, so no state is colour alone.",
+      "fields": {
+        "items[].title": "What must hold or be done.",
+        "items[].state": "`todo`, `doing`, `done`, `blocked` or `skip`. Default `todo`.",
+        "items[].weight": "How much it counts in the share. Above 0. Default 1.",
+        "items[].owner": "Who has it.",
+        "items[].evidence": "What shows it holds: a test, a file, a command.",
+        "items[].href": "A link for the evidence: an http or https link, a repo path or a #anchor.",
+        "items[].detail": "Paragraphs folded under the item, opened when it is selected.",
+        "groups[].items[].title": "What must hold or be done.",
+        "groups[].items[].state": "`todo`, `doing`, `done`, `blocked` or `skip`. Default `todo`.",
+        "groups[].items[].weight": "How much it counts in the share. Above 0. Default 1.",
+        "groups[].items[].owner": "Who has it.",
+        "groups[].items[].evidence": "What shows it holds: a test, a file, a command.",
+        "groups[].items[].href": "A link for the evidence: an http or https link, a repo path or a #anchor.",
+        "groups[].items[].detail": "Paragraphs folded under the item, opened when it is selected.",
+        "items": "A flat list of items. Use this or `groups`, not both.",
+        "groups": "Groups of items, for example one per milestone or release. At least one.",
+        "groups[].title": "The group name.",
+        "groups[].items": "The items in the group, with the same fields as `items`. At least one.",
+        "groups[].target": "A target date, `YYYY-MM-DD`.",
+        "layout": "`list` or `progress`. Default `list`. `progress` shows only a bar per group, with no item rows, so only groups can be commented on in the page (the items still have ids for `get`, `set` and `add`); it needs `groups`."
+      }
+    },
+    "metrics": {
+      "about": "Named measures with a value per column and the change between two columns: latency, bundle size, query cost, test counts. One item per measure. Up to 6 measures over two columns draw as tiles, the rest as a table. A tile shows only the two `compare` columns, so a block with three columns in `layout: tiles` hides the middle one; use `table` to show every column. For a `%` measure the difference shows in percentage points (`+5 pp (+50%)`). A value or change below 1e-6 or at or above 1e21 in size shows in exponent form (`2e-25`, `1.2e21`); between those bounds it shows plain digits.",
+      "fields": {
+        "columns": "The columns of values, for example `main` and the PR. At least one.",
+        "columns[].id": "Unique within the block. `values` and `compare` name the column by it.",
+        "columns[].title": "The column name.",
+        "compare": "Two column ids: the change runs from the first to the second. Default the first and the last column.",
+        "measures": "The measures. At least one.",
+        "measures[].title": "The measure name, for example `p95 latency`.",
+        "measures[].unit": "The unit, for example `ms`, `KB` or `%`.",
+        "measures[].better": "Which way is better: `lower`, `higher` or `none`. Default `none`.",
+        "measures[].values": "Column id to number. Each key must be a column id. A column with no value shows a dash.",
+        "measures[].threshold": "How far the change may go the wrong way, in percent of the first compared value. Needs `better` lower or higher. The percent is always relative, also for a `%` measure: `bad: 10` on 20% → 23% means 10% of 20, not 10 points. With a negative first value the percent is of its size (−200 → −300 is −50%). When the first value is 0 there is no percent, so any wrong-way change passes the threshold: `warn` alone warns, and `bad` makes it bad. With no threshold, any wrong-way change warns; set one for a change to show as bad.",
+        "measures[].threshold.warn": "Past this percent the change shows as a warning.",
+        "measures[].threshold.bad": "Past this percent the change shows as bad, and the measure needs `detail` to say why.",
+        "measures[].trend": "Earlier values, oldest first, drawn as a sparkline. At least 2 numbers.",
+        "measures[].detail": "Paragraphs folded under the measure in the reading: why it moved, how it was measured.",
+        "layout": "`auto`, `tiles` or `table`. Default `auto`: tiles for up to 6 measures over two columns, else a table."
+      }
+    },
+    "table": {
+      "about": "Facts in rows and typed columns: test results, CI jobs, coverage, API endpoints, dependency changes, a risk register, related links, or one record's fields (`layout: \"fields\"`). One item per row and per group, and one per cell, `<row id>.<column id>`, so a comment attaches to a row or a cell and `get` and `set` reach either. Rows show in the order written, or by `sort`; the reader cannot re-sort. Numbers align right; a state shows its word with a mark, and a delta its sign, arrow and whether it went the better way, so nothing is colour alone.",
+      "fields": {
+        "columns": "The columns, in order. At least one. The first is the row name unless a row has a `title`.",
+        "columns[].id": "Keys the cells. Unique in the block, with no dot.",
+        "columns[].title": "The column heading.",
+        "columns[].kind": "How cells show: `text`, `number`, `percent`, `duration`, `bytes`, `delta`, `version`, `date`, `link`, `code` or `state`. Default `text`. `number`, `percent` (0 to 100, with a bar), `duration`, `bytes` and `delta` take numbers. `state` takes a word with a tone. `link` takes a URL or repo path. `date` is `YYYY-MM-DD` or `YYYY-MM-DDTHH:MM`.",
+        "columns[].unit": "The unit of a `number` or `delta` (`ms`, `KB`, `%`; a `%` delta shows as `pp`). A `duration` is in `s`, `ms`, `min` or `h` (default `s`) and a `bytes` column in `B`, `kB`, `MB` or `GB` (default `B`); both show in a readable unit.",
+        "columns[].better": "For a `delta` column, which way is better: `higher`, `lower` or `none`. Default `none`. The wrong way warns.",
+        "rows": "The rows, in the order shown unless `sort` is set. At least one.",
+        "rows[].title": "The row name, when the first column is not it.",
+        "rows[].cells": "Column id to value: a string or a number, or `{\"value\", \"href\", \"note\"}` for a cell that links somewhere or carries a note. An empty cell is left out.",
+        "rows[].detail": "Paragraphs folded under the row, opened when the row is selected: a failure message, a reason.",
+        "rows[].href": "A link for the whole row, shown beside its name: a web link, a repo path or a #anchor.",
+        "states": "Word to tone for state columns: each word maps to `ok`, `warn`, `bad` or `skip`. Words not listed: `ok` ok, `pass` ok, `valid` ok, `warn` warn, `bad` bad, `fail` bad, `error` bad, `skip` skip.",
+        "sort": "Show the rows in this order. Numbers sort as numbers, state words bad first, empty cells last.",
+        "sort.column": "The column id to sort by.",
+        "sort.order": "`asc` or `desc`. Default `asc`.",
+        "tally": "A state column whose word counts show above the table, for example `3 pass, 1 fail`.",
+        "groups": "Groups of rows, each under a heading. With groups, every row is in exactly one.",
+        "groups[].title": "The group heading.",
+        "groups[].rows": "Row ids, in the order shown.",
+        "layout": "`table` or `fields`. Default `table`. `fields` shows each row as label and value pairs: one record's fields."
+      }
+    },
+    "chart": {
+      "about": "A chart over the rows of a table: bars (grouped, stacked or horizontal), a line, an area or points. It draws from its own `columns` and `rows`, or from a table block named by `data`, so a table and its chart are never written twice. `x` is the category column and `y` lists the series columns, which share one axis and so one kind and unit. Each plotted value is an item `<chart id>.<row id>.<column id>`, so a comment attaches to one bar or point. The SVG carries a text summary, series are told apart by mark shape (line, point) or fill pattern (bar, area) and the legend as well as colour, and the values sit in a Data table under the chart (open it with its summary; its cells then take Tab).",
+      "fields": {
+        "mark": "`bar`, `line`, `area` or `point`.",
+        "x": "The column that names each row on the category axis.",
+        "y": "The series: number, percent, duration, bytes or delta columns, one to six, all with the same kind and unit. Colours `--s1` to `--s6` follow this order.",
+        "data": "The id of a table block to draw from. Then the chart has no `columns` or `rows` of its own.",
+        "columns": "The columns, when the chart holds its own data. Same as a table.",
+        "columns[].id": "Keys the cells. Unique in the block, with no dot.",
+        "columns[].title": "The column heading; a series uses it in the legend.",
+        "columns[].kind": "How values show: `text`, `number`, `percent`, `duration`, `bytes`, `delta`, `version`, `date`, `link`, `code` or `state`. Series columns take a numeric kind.",
+        "columns[].unit": "The unit of a number, shown on the axis and in labels.",
+        "columns[].better": "For a delta column: `higher`, `lower` or `none`.",
+        "rows": "The rows, in the order drawn unless `sort` is set. Same as a table.",
+        "rows[].title": "Not shown by the chart, which names a row by its `x` cell; kept with the data.",
+        "rows[].cells": "Column id to value. An empty cell breaks a line and draws no mark.",
+        "rows[].detail": "Not shown by the chart; kept with the data.",
+        "rows[].href": "A link for the row.",
+        "states": "Not used by series; for state columns kept in the data.",
+        "sort": "Draw the rows in this order.",
+        "sort.column": "The column id to sort by.",
+        "sort.order": "`asc` or `desc`. Default `asc`.",
+        "stack": "Stack the series, for bars and areas. Values must be 0 or more.",
+        "horizontal": "Draw bars from the left, for long category names. Bars only.",
+        "bands": "Shaded ranges on the value axis, each `{id, title, from, to}`: an acceptable range.",
+        "lines": "Threshold lines on the value axis, each `{id, title, at}`: a budget or a limit.",
+        "bands[].title": "The band label, drawn inside it.",
+        "bands[].from": "The low end of the band, in the axis unit.",
+        "bands[].to": "The high end of the band, above `from`.",
+        "lines[].title": "The line label.",
+        "lines[].at": "The value the line crosses, in the axis unit.",
+        "maxPoints": "Most points (rows times series) `check` allows. Default 240, to keep the page small."
+      }
+    },
+    "timeline": {
+      "about": "Dated events as a list in time order: an incident, a changelog, the commits of a PR. One item per event. Events list under their `group` (for example a version), in the order the groups are first written; without `group` they list under their day. Times show as written and are not converted; a time with no zone sorts as UTC. The reviewer comments on an event. A tone shows as a glyph and a word, so it is never colour alone.",
+      "fields": {
+        "events": "The events, in any order; the page sorts them by `at`. At least one.",
+        "events[].title": "What happened, in a few words.",
+        "events[].at": "When it happened: `YYYY-MM-DD`, or a date-time such as `2026-10-12T09:02Z`.",
+        "events[].end": "When it ended, in the same form. Not before `at`.",
+        "events[].lane": "Who or what acted: a person or a system. With `lanes`, one of its names.",
+        "events[].group": "A heading to list the event under, for example `v1.4.0`. If any event has one, all must.",
+        "events[].kind": "What sort of event it is, for example `added`, `fixed` or `rollback`. `kinds` can map it to a tone.",
+        "events[].tone": "`ok`, `warn`, `bad` or `skip`. Beats the tone of its `kind`.",
+        "events[].label": "A short code beside the title, for example a commit sha.",
+        "events[].summary": "One line under the title.",
+        "events[].detail": "Paragraphs folded under the event, opened when it is selected.",
+        "events[].href": "A link on the title: an http or https link, a repo path or a #anchor.",
+        "lanes": "The lane names in order. When given, every `lane` must be one of them, so a typo is caught.",
+        "kinds": "Word to tone for `kind`: each word maps to `ok`, `warn`, `bad` or `skip`. Words not listed: `ok` is ok, `pass` is ok, `valid` is ok, `warn` is warn, `bad` is bad, `fail` is bad, `error` is bad, `skip` is skip."
+      }
+    },
+    "tree": {
+      "about": "An indented tree with measure columns: a file tree with sizes and states, a bundle tree, a query plan. One item per node. A node names its `parent`; nodes with none are roots. A folder folds with an arrow (native `<details>`, no script); selecting a row never folds it. Sums are written on the parent, not computed.",
+      "fields": {
+        "nodes": "The nodes, parents before or after their children. At least one.",
+        "nodes[].title": "The node name, for example a file name.",
+        "nodes[].parent": "The id of the node this one sits under. Leave out for a root.",
+        "nodes[].state": "A word shown as a chip, for example `added`. `states` maps it to a tone.",
+        "nodes[].cells": "Column id to value, as in a table row.",
+        "nodes[].detail": "Paragraphs folded under the node, opened when it is selected.",
+        "nodes[].href": "A link on the title: an http or https link, a repo path or a #anchor.",
+        "columns": "The measure columns, shown right of the names. Same as a table. Optional.",
+        "columns[].id": "Keys the cells. Unique in the block, with no dot.",
+        "columns[].title": "The column heading.",
+        "columns[].kind": "How values show: `text`, `number`, `percent`, `duration`, `bytes`, `delta`, `version`, `date`, `link`, `code` or `state`.",
+        "columns[].unit": "The unit of a number, duration or bytes value.",
+        "columns[].better": "For a delta column: `higher`, `lower` or `none`.",
+        "states": "Tones for the `state` words: each word maps to ok, warn, bad or skip.",
+        "bar": "A number column drawn as an in-row bar, scaled to its largest value.",
+        "open": "How many levels start open. Roots are level 0. Default: all open; 0 starts closed."
+      }
+    },
+    "tradeoffs": {
+      "about": "A weighted decision matrix: a question's options scored against criteria, with a weighted total per option. One item per criterion, and one per option column. An option column's id is `<block id>.<option id>` (`queue.pg`), so two tradeoffs blocks can weigh the same question and an option id may equal another item's id; a comment or a question's `about` names the column by that id. `check` warns when the best total is not the question's `recommended` option. Scores, weights and totals use the same rule: a number below 1e-6 or at or above 1e21 in size shows in exponent form.",
+      "fields": {
+        "question": "The id of a `single` or `multi` question, in the document `questions` or a `question` block. Its options are the columns, with their titles. This question is the decision itself: do not add another one for the block. Put the question in a `question` block right after this block so the reviewer answers beside the table. An open question shows its options as choices. A closed question shows its `resolution` and the chosen option, with the options behind an \"Options and media\" disclosure; the table still draws.",
+        "scale": "The range scores take. Default 1 to 5, higher is better.",
+        "scale.min": "The lowest score.",
+        "scale.max": "The highest score. Must be above `min`.",
+        "scale.better": "`higher` or `lower`. Default `higher`. It also decides which total is best.",
+        "criteria": "What the options are judged on, as rows. At least one.",
+        "criteria[].title": "The criterion name, for example `Operational cost`.",
+        "criteria[].weight": "How much it counts in the total. Above 0. Default 1.",
+        "criteria[].detail": "Paragraphs folded under the criterion in the reading: what it means, and why this weight.",
+        "scores": "One score per criterion and option. Every pair is scored once.",
+        "scores[].criterion": "The criterion id.",
+        "scores[].option": "The option id, from the question.",
+        "scores[].score": "The score, within `scale`.",
+        "scores[].reason": "Why this score, in a line."
+      }
+    }
+  }
+}

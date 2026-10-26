@@ -1,0 +1,10 @@
+1. parley new <id>, then parley add and parley set.   parley block <type> shows the fields
+2. parley check docs/parley/<id>.json       fix every line it prints
+3. parley serve                             run it in the background
+4. parley answers <id> --wait               run it in the background; it exits on a send
+5. parley open <id>                         the link to give the reviewer, once a listener runs
+   parley status                            running servers and who each document waits on
+   parley stop                              stop the server when the review is over
+6. parley answers <id> --reply <thread> --text "..."   reply to each send
+7. Changes requested: set, add, remove or move, then parley answers <id> --new-round.
+   Approved: parley render <id>.json --out <id>.md.

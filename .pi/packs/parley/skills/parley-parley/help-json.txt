@@ -1,0 +1,11 @@
+Every command takes --json and prints one object on one line.
+  v         the shape's version, 1
+  ok        false when the command failed; the exit code says it too
+  command   the command that ran
+  warnings  strings, as check prints them
+  next      likely next commands: [{ "run": "parley ...", "why": "..." }], at most three
+  error     on failure: { code, message, candidates? }
+The command's own fields sit beside these at the top level.
+In text mode the next steps are the last lines, "next: <command>  <why>". They go to stderr when
+stdout is data for a file or a pipe. PARLEY_HINTS=0 turns them off in both forms.
+Exit codes: 0 ok, 1 failed, 2 usage, 10 answers --wait --timeout ran out.

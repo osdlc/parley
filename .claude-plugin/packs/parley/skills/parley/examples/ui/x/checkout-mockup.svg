@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400" font-family="system-ui, sans-serif">
+  <rect width="640" height="400" fill="#f6f7f9"/>
+  <rect x="0" y="0" width="640" height="48" fill="#1f2937"/>
+  <text x="24" y="31" font-size="16" font-weight="600" fill="#fff">Checkout</text>
+  <rect x="24" y="72" width="380" height="296" rx="8" fill="#fff" stroke="#d6dae1"/>
+  <text x="44" y="102" font-size="13" font-weight="600" fill="#374151">Delivery address</text>
+  <rect x="44" y="114" width="340" height="32" rx="4" fill="#fff" stroke="#9ca3af"/>
+  <rect x="44" y="158" width="160" height="32" rx="4" fill="#fff" stroke="#9ca3af"/>
+  <rect x="224" y="158" width="160" height="32" rx="4" fill="#fff" stroke="#9ca3af"/>
+  <text x="44" y="226" font-size="13" font-weight="600" fill="#374151">Payment</text>
+  <rect x="44" y="238" width="340" height="32" rx="4" fill="#fff" stroke="#9ca3af"/>
+  <rect x="44" y="318" width="120" height="36" rx="6" fill="#2563eb"/>
+  <text x="76" y="341" font-size="13" font-weight="600" fill="#fff">Pay now</text>
+  <rect x="428" y="72" width="188" height="140" rx="8" fill="#fff" stroke="#d6dae1"/>
+  <text x="444" y="102" font-size="13" font-weight="600" fill="#374151">Order summary</text>
+  <rect x="444" y="116" width="120" height="8" rx="4" fill="#e5e7eb"/>
+  <rect x="444" y="136" width="90" height="8" rx="4" fill="#e5e7eb"/>
+  <text x="444" y="190" font-size="14" font-weight="700" fill="#111827">Total 84.00</text>
+</svg>
