@@ -1,0 +1,11 @@
+A document holds blocks. A block holds items. Every block and item has an id.
+An item is anything a reviewer can select and comment on.
+To see what a document can hold, run: parley blocks
+
+The review: questions ask the reviewer to decide, with options and a recommendation.
+Comments and asks back start threads on an item. Answers, notes and the verdict close a round.
+To read about the page, the sends and the answers file, run: parley help answers
+
+Change over time: a round, a revision, and the answers file that records each send.
+Each edit is one op on one item: set, add, remove, move, or a list of them with apply.
+To see how to address one item and the ops, run: parley help ids

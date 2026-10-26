@@ -1,0 +1,181 @@
+{
+  "id": "release-plan",
+  "title": "Release 2.4: carrier tracking",
+  "summary": "The plan for the carrier tracking release, in nested sections: what ships, the database and API changes, and the rollout. Two decisions are open.",
+  "created": "2026-10-21",
+  "author": {
+    "agent": "release-agent"
+  },
+  "questions": [
+    {
+      "id": "q-window",
+      "prompt": "Which night should the backfill run?",
+      "kind": "single",
+      "about": "op-backfill",
+      "recommended": "tue",
+      "options": [
+        {
+          "id": "tue",
+          "title": "Tuesday",
+          "detail": "The lowest write load of the week."
+        },
+        {
+          "id": "sat",
+          "title": "Saturday",
+          "detail": "Fewer people on call."
+        }
+      ]
+    },
+    {
+      "id": "q-flag",
+      "prompt": "Should the tracking page start behind a flag?",
+      "kind": "single",
+      "about": "rollout",
+      "options": [
+        {
+          "id": "flag",
+          "title": "Yes, for 10% of accounts first"
+        },
+        {
+          "id": "all",
+          "title": "No, ship to everyone"
+        }
+      ],
+      "priority": "high"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "scope",
+      "type": "prose",
+      "title": "What ships",
+      "text": "Orders get a carrier and a tracking number. The order page shows where a parcel is, and the warehouse stops typing tracking links by hand."
+    },
+    {
+      "id": "sec-changes",
+      "type": "heading",
+      "title": "The changes",
+      "level": 1
+    },
+    {
+      "id": "sec-db",
+      "type": "heading",
+      "title": "Database",
+      "level": 2
+    },
+    {
+      "id": "db-ops",
+      "type": "operations",
+      "title": "Schema changes",
+      "language": "sql",
+      "phases": [
+        {
+          "id": "ph-add",
+          "title": "Before the deploy",
+          "ops": ["op-add"]
+        },
+        {
+          "id": "ph-fill",
+          "title": "After the deploy",
+          "ops": ["op-backfill", "op-index"]
+        }
+      ],
+      "operations": [
+        {
+          "id": "op-add",
+          "kind": "add-column",
+          "target": "orders.carrier",
+          "title": "Add carrier and tracking number",
+          "code": "ALTER TABLE orders\n  ADD COLUMN carrier text,\n  ADD COLUMN tracking_no text;",
+          "detail": "Both columns are nullable with no default, so the change is catalog-only.",
+          "risk": "low",
+          "reversible": true,
+          "rollback": "ALTER TABLE orders DROP COLUMN carrier, DROP COLUMN tracking_no;"
+        },
+        {
+          "id": "op-backfill",
+          "kind": "backfill",
+          "target": "orders.carrier",
+          "title": "Backfill carriers from shipments",
+          "code": "UPDATE orders o SET carrier = s.carrier\nFROM shipments s\nWHERE s.order_id = o.id AND o.carrier IS NULL;",
+          "detail": "Runs in batches of 10k ids with a short sleep between them, so each batch holds row locks only.",
+          "risk": "medium",
+          "locks": "Row locks per batch.",
+          "reversible": true,
+          "rollback": "Nothing to undo: the columns were empty."
+        },
+        {
+          "id": "op-index",
+          "kind": "index",
+          "target": "orders.tracking_no",
+          "title": "Index tracking numbers",
+          "code": "CREATE INDEX CONCURRENTLY orders_tracking_no ON orders (tracking_no);",
+          "detail": "Concurrent, so writes continue. A failed build leaves an invalid index to drop and retry.",
+          "risk": "low",
+          "reversible": true,
+          "rollback": "DROP INDEX CONCURRENTLY orders_tracking_no;"
+        }
+      ]
+    },
+    {
+      "id": "sec-api",
+      "type": "heading",
+      "title": "API",
+      "level": 2
+    },
+    {
+      "id": "api-route",
+      "type": "trace",
+      "title": "GET /orders/:id/tracking",
+      "input": "GET /orders/8812/tracking",
+      "steps": [
+        {
+          "id": "t-auth",
+          "title": "Check the caller owns the order",
+          "outcome": "pass",
+          "reason": "Same rule as GET /orders/:id.",
+          "detail": "A support agent passes too, through the existing `orders:read-any` scope."
+        },
+        {
+          "id": "t-cache",
+          "title": "Read the cached status",
+          "outcome": "miss",
+          "reason": "Nothing cached for this tracking number yet.",
+          "detail": "The carrier APIs rate-limit by account, so one parcel must not cost one call per page view."
+        },
+        {
+          "id": "t-carrier",
+          "title": "Ask the carrier on a miss",
+          "outcome": "ok",
+          "reason": "The carrier answers within the 2 s timeout.",
+          "detail": "On a timeout the page shows the last known status and when it was checked."
+        }
+      ]
+    },
+    {
+      "id": "sec-rollout",
+      "type": "heading",
+      "title": "Rollout",
+      "level": 1
+    },
+    {
+      "id": "rollout",
+      "type": "prose",
+      "title": "Order of work",
+      "text": "Deploy the columns, then the app that writes them, then run the backfill at night. The tracking page ships last."
+    },
+    {
+      "id": "decide",
+      "type": "question",
+      "title": "Release questions",
+      "questions": [
+        {
+          "id": "q-notes",
+          "prompt": "Anything the release notes must say?",
+          "kind": "text",
+          "priority": "low"
+        }
+      ]
+    }
+  ]
+}

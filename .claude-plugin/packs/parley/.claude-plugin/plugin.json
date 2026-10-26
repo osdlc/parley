@@ -1,0 +1,16 @@
+{
+  "name": "parley",
+  "version": "0.2.0",
+  "description": "Review pages for agent work: write a parley document, serve it, and read the reviewer's answers back.",
+  "author": {
+    "name": "osdlc"
+  },
+  "license": "MIT OR Apache-2.0",
+  "keywords": [
+    "review",
+    "agent",
+    "questions",
+    "diff"
+  ],
+  "skills": "./skills/"
+}

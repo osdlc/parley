@@ -1,0 +1,78 @@
+{
+  "id": "release-progress",
+  "title": "Release 0.2 progress and acceptance criteria",
+  "summary": "A checklist with groups: a bar per milestone, a total, and the acceptance criteria of one task. Explanatory: no questions.",
+  "created": "2026-10-21",
+  "blocks": [
+    {
+      "id": "intro",
+      "type": "prose",
+      "text": "State as of today. The agent sets each state; comment on a group or an item to change it."
+    },
+    {
+      "id": "milestones",
+      "type": "checklist",
+      "title": "Milestones",
+      "groups": [
+        {
+          "id": "m-alpha",
+          "title": "Alpha",
+          "target": "2026-10-31",
+          "items": [
+            { "id": "a-cli", "title": "Agent CLI verbs", "state": "done", "weight": 3 },
+            {
+              "id": "a-shell",
+              "title": "Three-pane page shell",
+              "state": "doing",
+              "weight": 2,
+              "owner": "page team"
+            },
+            { "id": "a-docs", "title": "Reference docs", "state": "todo" },
+            {
+              "id": "a-win",
+              "title": "Windows path handling",
+              "state": "skip",
+              "detail": "Not in this release."
+            }
+          ]
+        },
+        {
+          "id": "m-blocks",
+          "title": "New blocks",
+          "target": "2026-11-14",
+          "items": [
+            {
+              "id": "b-check",
+              "title": "checklist block",
+              "state": "done",
+              "evidence": "tests/checklist.test.ts"
+            },
+            {
+              "id": "b-chart",
+              "title": "chart block",
+              "state": "blocked",
+              "detail": "Waits on the shared data model."
+            },
+            { "id": "b-time", "title": "timeline block", "state": "todo" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ac",
+      "type": "checklist",
+      "title": "Acceptance criteria",
+      "items": [
+        {
+          "id": "ac-1",
+          "title": "A group's bar shows the weighted share of done items",
+          "state": "done",
+          "evidence": "tests/checklist.test.ts",
+          "href": "tests/checklist.test.ts"
+        },
+        { "id": "ac-2", "title": "check rejects an unknown state", "state": "done" },
+        { "id": "ac-3", "title": "The markdown export has one row per group", "state": "doing" }
+      ]
+    }
+  ]
+}

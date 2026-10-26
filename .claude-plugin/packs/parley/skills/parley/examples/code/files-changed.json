@@ -1,0 +1,197 @@
+{
+  "id": "files-changed",
+  "title": "Files changed by the tree block, and where the bundle bytes go",
+  "summary": "Two trees: a PR's files with change states and sizes, and a bundle tree with bars. Explanatory: no questions.",
+  "created": "2026-10-21",
+  "blocks": [
+    {
+      "id": "intro",
+      "type": "prose",
+      "text": "Click a row to select it and comment on it. A folder folds with its arrow; Tab reaches it and Space or Enter folds it."
+    },
+    {
+      "id": "files",
+      "type": "tree",
+      "title": "Files changed",
+      "columns": [
+        {
+          "id": "size",
+          "title": "Size",
+          "kind": "bytes",
+          "unit": "B"
+        },
+        {
+          "id": "lines",
+          "title": "Lines",
+          "kind": "number"
+        },
+        {
+          "id": "note",
+          "title": "Note"
+        }
+      ],
+      "states": {
+        "added": "ok",
+        "modified": "warn",
+        "deleted": "bad",
+        "renamed": "skip"
+      },
+      "nodes": [
+        {
+          "id": "f-src",
+          "title": "src",
+          "cells": {
+            "size": 14800,
+            "lines": 410
+          }
+        },
+        {
+          "id": "f-blocks",
+          "parent": "f-src",
+          "title": "blocks",
+          "cells": {
+            "size": 14800,
+            "lines": 410
+          }
+        },
+        {
+          "id": "f-tree",
+          "parent": "f-blocks",
+          "title": "tree.ts",
+          "state": "added",
+          "cells": {
+            "size": 9100,
+            "lines": 250
+          },
+          "detail": "The block. Nodes render as nested details, so folding needs no script.",
+          "href": "src/blocks/tree.ts"
+        },
+        {
+          "id": "f-table",
+          "parent": "f-blocks",
+          "title": "table.ts",
+          "state": "modified",
+          "cells": {
+            "size": 5700,
+            "lines": 160
+          }
+        },
+        {
+          "id": "f-old",
+          "parent": "f-src",
+          "title": "legacy-tree.ts",
+          "state": "deleted",
+          "cells": {
+            "size": 0,
+            "lines": 0,
+            "note": "Superseded by tree.ts; delete once the gallery stops importing it"
+          }
+        },
+        {
+          "id": "f-tests",
+          "title": "tests",
+          "cells": {
+            "size": 7400,
+            "lines": 210
+          }
+        },
+        {
+          "id": "f-spec",
+          "parent": "f-tests",
+          "title": "tree.spec.ts",
+          "state": "added",
+          "cells": {
+            "size": 3200,
+            "lines": 90
+          }
+        },
+        {
+          "id": "f-unit",
+          "parent": "f-tests",
+          "title": "tree.test.ts",
+          "state": "renamed",
+          "cells": {
+            "size": 4200,
+            "lines": 120
+          }
+        }
+      ]
+    },
+    {
+      "id": "bundle",
+      "type": "tree",
+      "title": "Where the bundle bytes go",
+      "columns": [
+        {
+          "id": "raw",
+          "title": "Raw",
+          "kind": "bytes",
+          "unit": "kB"
+        },
+        {
+          "id": "share",
+          "title": "Share",
+          "kind": "percent"
+        }
+      ],
+      "bar": "raw",
+      "open": 1,
+      "nodes": [
+        {
+          "id": "b-all",
+          "title": "parley.mjs",
+          "cells": {
+            "raw": 620,
+            "share": 100
+          }
+        },
+        {
+          "id": "b-blocks",
+          "parent": "b-all",
+          "title": "blocks",
+          "cells": {
+            "raw": 310,
+            "share": 50
+          },
+          "detail": "Every block module: renderer, checker, notes and example."
+        },
+        {
+          "id": "b-table",
+          "parent": "b-blocks",
+          "title": "table",
+          "cells": {
+            "raw": 22,
+            "share": 3.5
+          }
+        },
+        {
+          "id": "b-chart",
+          "parent": "b-blocks",
+          "title": "chart",
+          "cells": {
+            "raw": 18,
+            "share": 2.9
+          }
+        },
+        {
+          "id": "b-page",
+          "parent": "b-all",
+          "title": "page",
+          "cells": {
+            "raw": 240,
+            "share": 38.7
+          }
+        },
+        {
+          "id": "b-lib",
+          "parent": "b-all",
+          "title": "lib",
+          "cells": {
+            "raw": 70,
+            "share": 11.3
+          }
+        }
+      ]
+    }
+  ]
+}

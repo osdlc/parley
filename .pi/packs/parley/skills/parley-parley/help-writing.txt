@@ -1,0 +1,10 @@
+Start from the decision or the point, not the history. One idea per block.
+Pick the block that fits the content: parley blocks search <words>.
+Give every question a recommendation and the reason for it.
+Mark a question priority=blocking only when you cannot go on without its answer.
+Anchor comments to the exact text: an annotated-text step quotes the text it explains.
+Short sentences. No decoration. Run parley check until it prints ok, then read the page once.
+parley block <type> prints a block's fields and a minimal example.
+Edit by item id, not by rewriting the file: parley set <doc> <item> summary='...',
+parley add <doc> --in <doc id> --from block.json, parley move, parley remove. Each runs check and
+writes only a document that passes; a served page updates by itself. parley help ids lists the ops.

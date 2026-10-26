@@ -1,0 +1,29 @@
+Every document, block, item and question has an id: a word, never a number.
+A document id is lowercase letters, digits and -, and is the file name: <id>.json.
+Other ids are unique within the document. Derived ids join a parent and a name with a dot:
+a schema column is <table id>.<column name>. Match an address as a whole string, never split on dots.
+An id never changes: set and move keep it. To replace an item, remove it and add a new one.
+add with no id makes one from the title (-2 on a clash) and prints it.
+Across documents: <doc id>#<item id>, the same as the page link /d/<doc id>#<item id>.
+A field inside an item follows a dot: parley get <doc> orders.status.purpose is item orders.status,
+field purpose; the longest prefix that is an id wins. [x] picks a list entry by id: options[db].title.
+parley check warns on an id with whitespace or any of # [ ] : =, because those break CLI addresses
+and links.
+parley get <doc> prints the outline; parley get <doc> <item> prints one item and what is around it.
+
+Each edit command is one op on one item:
+  parley set <doc> <item> <path>=<text> | <path>:=<json> ...
+  parley add <doc> --in <item> [--list <field>] [--after|--before <item>] <path>=<v> ... | --from <file|->
+  parley remove <doc> <item> [--force]
+  parley move <doc> <item> --after|--before|--in <item>
+  parley apply <doc> <ops.json|->   a JSON list of ops, each on the result of the one before
+The ops apply takes ("list" picks the parent's list; "parent" on doc.move puts it last there):
+  {"kind":"doc.set","item":"q-store","path":"prompt","value":"Where?"}
+  {"kind":"doc.add","item":"sort","parent":"query","after":"filter","value":{"title":"Sort"}}
+  {"kind":"doc.move","item":"sort","before":"filter"}
+  {"kind":"doc.del","item":"sort"}
+The result must pass check or nothing is written. A field check does not know is refused unless
+--force, so a mistyped name never lands in the file. remove refuses an item with comments or
+answers unless --force. An id stays taken after its item is removed while the answers file holds
+comments or answers on it: add refuses it unless --force, which joins the old threads to the new
+item. An id the block makes up (a schema column) has no fields to edit; edit its block.

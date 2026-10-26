@@ -1,0 +1,104 @@
+{
+  "id": "incident-timeline",
+  "title": "Checkout outage, 12 October, and the 1.4 changelog",
+  "summary": "Two dated lists: an incident walked in time order by who acted, and a changelog grouped by version. Explanatory: no questions.",
+  "created": "2026-10-21",
+  "blocks": [
+    {
+      "id": "intro",
+      "type": "prose",
+      "text": "Times are UTC. Comment on an event to correct it or add what was missing."
+    },
+    {
+      "id": "incident",
+      "type": "timeline",
+      "title": "Outage, 2026-10-12",
+      "lanes": ["pager", "sam", "deploy bot"],
+      "kinds": { "alert": "bad", "mitigation": "ok", "cause": "warn" },
+      "events": [
+        {
+          "id": "e-deploy",
+          "at": "2026-10-12T08:41Z",
+          "lane": "deploy bot",
+          "title": "Build 3602 reaches production",
+          "label": "3602",
+          "summary": "The rollout finished in four minutes."
+        },
+        {
+          "id": "e-alert",
+          "at": "2026-10-12T09:02Z",
+          "lane": "pager",
+          "title": "p95 latency alert fires",
+          "kind": "alert",
+          "summary": "Checkout p95 above 800 ms for five minutes."
+        },
+        {
+          "id": "e-cause",
+          "at": "2026-10-12T09:11Z",
+          "end": "2026-10-12T09:19Z",
+          "lane": "sam",
+          "title": "Cause found: an unindexed lookup in the new cart query",
+          "kind": "cause",
+          "detail": "The query added in 3602 scans the whole `orders` table when the cart has a coupon.\n\nThe load test used carts without coupons, so it never ran this path."
+        },
+        {
+          "id": "e-roll",
+          "at": "2026-10-12T09:20Z",
+          "lane": "sam",
+          "title": "Rollback of 3602",
+          "kind": "mitigation",
+          "href": "#e-deploy"
+        },
+        {
+          "id": "e-clear",
+          "at": "2026-10-12T09:34Z",
+          "lane": "pager",
+          "title": "Alert clears",
+          "tone": "ok"
+        }
+      ]
+    },
+    {
+      "id": "changelog",
+      "type": "timeline",
+      "title": "Changelog",
+      "kinds": { "added": "ok", "fixed": "ok", "changed": "skip" },
+      "events": [
+        {
+          "id": "c-142-fix",
+          "group": "1.4.2",
+          "at": "2026-10-14",
+          "kind": "fixed",
+          "title": "Coupon carts use the order index",
+          "label": "9f3a1c2",
+          "href": "https://github.com/acme/shop/pull/218"
+        },
+        {
+          "id": "c-141-fix",
+          "group": "1.4.1",
+          "at": "2026-10-09",
+          "kind": "fixed",
+          "title": "Retry on a closed connection",
+          "label": "41be07d"
+        },
+        {
+          "id": "c-140-add",
+          "group": "1.4.0",
+          "at": "2026-10-05",
+          "kind": "added",
+          "title": "Saved carts",
+          "summary": "A cart survives a sign-out for 30 days.",
+          "label": "c7d20e9"
+        },
+        {
+          "id": "c-140-chg",
+          "group": "1.4.0",
+          "at": "2026-10-05",
+          "kind": "changed",
+          "title": "Cart totals round per line",
+          "label": "0a6b3f8"
+        }
+      ]
+    }
+  ]
+}

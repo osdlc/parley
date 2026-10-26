@@ -1,0 +1,60 @@
+{
+  "id": "checkout-regions",
+  "title": "Checkout form: marked regions",
+  "summary": "A mockup with three boxes the agent marks, so a reviewer can comment on a part of the image.",
+  "created": "2026-10-21",
+  "blocks": [
+    {
+      "type": "prose",
+      "id": "intro",
+      "text": "The mockup below has three marked regions. Hover or Tab to a box to read its name; click one, or its row in the Threads tab, to comment on it. Expand the image and the boxes stay."
+    },
+    {
+      "type": "figure",
+      "id": "mockup",
+      "src": "x/checkout-mockup.svg",
+      "alt": "A checkout page: an address and payment form on the left, an order summary on the right",
+      "caption": "Checkout, proposed layout",
+      "detail": "The form keeps one column. The summary moves to the right and stays in view.",
+      "regions": [
+        {
+          "id": "address",
+          "title": "Address fields",
+          "box": { "x": 0.06, "y": 0.26, "w": 0.57, "h": 0.2 },
+          "detail": "Street on one row; city and postcode share the next."
+        },
+        {
+          "id": "pay",
+          "title": "Pay button",
+          "box": { "x": 0.06, "y": 0.78, "w": 0.2, "h": 0.1 },
+          "detail": "Primary action. Disabled until the form is valid."
+        },
+        {
+          "id": "summary",
+          "title": "Order summary",
+          "box": { "x": 0.67, "y": 0.18, "w": 0.3, "h": 0.35 }
+        }
+      ]
+    },
+    {
+      "type": "story",
+      "id": "states",
+      "title": "Same page, as a shot",
+      "shots": [
+        {
+          "id": "alt",
+          "path": "x/checkout-mockup.svg",
+          "caption": "A shot in a story block takes regions too",
+          "regions": [
+            {
+              "id": "header",
+              "title": "Header bar",
+              "box": { "x": 0, "y": 0, "w": 1, "h": 0.12 },
+              "detail": "Plain; no cart link yet."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
