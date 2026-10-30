@@ -12,8 +12,8 @@ How to write blocks and questions, and how to revise the document between rounds
 ## Blocks
 
 - **Link every file you name.** Every file the page names gets a link that opens it in the viewer
-  and a link to GitHub. Give the item or block that names it a `source` with a path from the
-  repository root. Set the document `repo` to the GitHub remote and the commit you read. The page
+  and a link to GitHub. Give the item or block that names it a `source` whose `uri` is the
+  path from the repository root. Set the document `repo` to the GitHub remote and the commit you read. The page
   then shows a link to the file viewer and a GitHub link. A `[[wikilink]]` does this for a `.md`
   file only, so any other file needs a `source`. `check` warns about a backticked repo path in the
   text that no `source` points at.
