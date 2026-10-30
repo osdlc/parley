@@ -1,67 +1,287 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>parley</title><meta name="description" content="parley shows an agent's plan as a page. You answer its questions there, and it reads your answers from a file."><link rel="stylesheet" href="/parley/_astro/Deck.B7o53SIo.css"><style>:root{--bg:#fbfbf9;--surface:#f1f1ec;--text:#1c1c1a;--muted:#5d5d57;--line:#dcdcd4;--accent:#2f5fd0;--code-bg:#ecece5;--font-sans:ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;--font-mono:ui-monospace, "SF Mono", Menlo, Consolas, monospace;color-scheme:light dark}@media (prefers-color-scheme:dark){:root{--bg:#141413;--surface:#1e1e1c;--text:#ecece6;--muted:#a3a39b;--line:#34342f;--accent:#7ea2ff;--code-bg:#26262a}}*,:before,:after{box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:var(--font-sans);margin:0;font-size:17px;line-height:1.55}a{color:var(--accent)}code,pre{font-family:var(--font-mono);font-size:.9em}code{background:var(--code-bg);border-radius:4px;padding:.1em .35em}pre{background:var(--code-bg);border-radius:6px;padding:.9em 1.1em;overflow-x:auto}pre code{background:0 0;padding:0}.page{max-width:880px;margin:0 auto;padding:0 16px 96px}.page section{padding:48px 0 0}.page h1{letter-spacing:-.02em;margin:72px 0 16px;font-size:clamp(2.2rem,6vw,3.4rem);line-height:1.1}.page h2{margin:0 0 16px;font-size:1.5rem}.lede{color:var(--muted);margin:0 0 24px;font-size:1.25rem}.steps{padding-left:1.2em}.steps li+li{margin-top:8px}.deck-frame{aspect-ratio:16/9;border:1px solid var(--line);border-radius:8px;overflow:hidden}.deck-links{color:var(--muted);margin-top:8px;font-size:.95rem}footer{border-top:1px solid var(--line);color:var(--muted);margin-top:72px;padding-top:16px;font-size:.95rem}
-</style></head><body><main class="page"><section><h1>parley</h1><p class="lede">parley shows an agent's plan as a page. You answer its questions there, and it reads your answers from a file.</p><pre><code>npm i -g @osdlc/parley</code></pre></section><section><h2>How it works</h2><ol class="steps"><li><strong>Write.</strong> The agent writes a document as JSON.</li><li><strong>Check.</strong><code>parley check</code> rejects a broken document.</li><li><strong>Review.</strong> You comment and answer its questions on one page.</li><li><strong>Read back.</strong> The agent reads your answers from a JSON file and revises.</li></ol></section><section><h2>The deck</h2><div class="deck-frame"><div class="reveal" data-deck data-embedded><div class="slides"><section><h1 id="parley">parley</h1>
-<p>Review your agent’s plans as a page.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>parley</title><meta name="description" content="parley shows an agent's plan as a page. You answer its questions there, and it reads your answers from a file."><link rel="stylesheet" href="/parley/_astro/Deck.CJetmhcE.css"><style>:root{--bg:#fbfbf9;--surface:#f1f1ec;--text:#1c1c1a;--muted:#5d5d57;--line:#dcdcd4;--accent:#2f5fd0;--code-bg:#ecece5;--font-sans:ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;--font-mono:ui-monospace, "SF Mono", Menlo, Consolas, monospace;color-scheme:light dark}@media (prefers-color-scheme:dark){:root{--bg:#141413;--surface:#1e1e1c;--text:#ecece6;--muted:#a3a39b;--line:#34342f;--accent:#7ea2ff;--code-bg:#26262a}}*,:before,:after{box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:var(--font-sans);margin:0;font-size:17px;line-height:1.55}a{color:var(--accent)}code,pre{font-family:var(--font-mono);font-size:.9em}code{background:var(--code-bg);border-radius:4px;padding:.1em .35em}pre{background:var(--code-bg);border-radius:6px;padding:.9em 1.1em;overflow-x:auto}pre code{background:0 0;padding:0}.page{max-width:880px;margin:0 auto;padding:0 16px 96px}.page section{padding:48px 0 0}.page h1{letter-spacing:-.02em;margin:72px 0 16px;font-size:clamp(2.2rem,6vw,3.4rem);line-height:1.1}.page h2{margin:0 0 16px;font-size:1.5rem}.lede{color:var(--muted);margin:0 0 24px;font-size:1.25rem}.steps{padding-left:1.2em}.steps li+li{margin-top:8px}.deck-frame{aspect-ratio:16/9;border:1px solid var(--line);border-radius:8px;overflow:hidden}.deck-links{color:var(--muted);margin-top:8px;font-size:.95rem}footer{border-top:1px solid var(--line);color:var(--muted);margin-top:72px;padding-top:16px;font-size:.95rem}
+</style></head><body><main class="page"><section><h1>parley</h1><p class="lede">parley shows an agent's plan as a page. You answer its questions there, and it reads your answers from a file.</p><pre><code>claude plugin marketplace add osdlc/parley
+claude plugin install parley@parley</code></pre></section><section><h2>How it works</h2><ol class="steps"><li><strong>Write.</strong> The agent writes a document as JSON.</li><li><strong>Check.</strong><code>parley check</code> rejects a broken document.</li><li><strong>Review.</strong> You comment and answer its questions on one page.</li><li><strong>Read back.</strong> The agent reads your answers from a JSON file and revises.</li></ol></section><section><h2>The deck</h2><div class="deck-frame"><div class="reveal" data-deck data-embedded><div class="slides"><section><h1 id="parley">parley</h1>
+<p>Review your agent’s work on a page, not in chat.</p>
+<p class="small">Alpha · runs on your machine · Claude Code, Codex, Cursor and Pi</p>
+<aside class="notes">
+parley is a CLI and a set of agent skills. The agent writes a document, I review it as a web
+page, and my answers go back to the agent as a file. Everything in this deck comes from one real
+review, run on parley 0.2.1.
+</aside>
 </section><section>
 <h2 id="the-problem">The problem</h2>
 <ul>
-<li>An agent’s plan arrives as long markdown in chat.</li>
+<li>An agent’s plan arrives as a long markdown reply in chat.</li>
 <li>Its questions are buried in the text.</li>
 <li>Your answer goes back as a paragraph the agent has to read.</li>
-<li>Nothing is kept when the session ends.</li>
+<li>When the session ends, the review is gone.</li>
 </ul>
 <aside class="notes">
-Replace the first bullet with the code review sentence once it is agreed (advantages.md).
+The cost is in the middle two lines. I miss a question, or answer it in a way the agent reads
+differently than I meant. Then the next session starts without any of it.
 </aside>
 </section><section>
-<h2 id="what-parley-is">What parley is</h2>
+<h2 id="canvases-help-inside-one-app">Canvases help, inside one app</h2>
 <ul>
-<li>The agent writes a document as JSON. You review it as one page.</li>
-<li>Comment on any part. Answer typed questions.</li>
-<li>Your answers go to a JSON file next to the document.</li>
-</ul>
-</section><section>
-<h2 id="the-loop">The loop</h2>
-<ul>
-<li>The agent writes the document and runs <code>parley check</code>.</li>
-<li><code>parley serve</code> shows the page. <code>parley open</code> prints its link.</li>
-<li>You answer, then press Finish review: Approve or Request changes.</li>
-<li>The agent reads <code>parley answers</code>, replies in a thread and revises. The page updates in place.</li>
-</ul>
-</section><section>
-<h2 id="block-types">Block types</h2>
-<ul>
-<li>20 block types: prose, question, diff, matrix, table, checklist, schema, plan, sequence and flow
-diagrams, and more.</li>
-<li>Prose tones, console and log output, image regions.</li>
+<li>Agent apps have a canvas or preview for rich output.</li>
+<li>Each one works only inside its own app.</li>
+<li>To share it, you make it public or the reviewer joins that app.</li>
+<li>To keep it, you copy it out by hand.</li>
 </ul>
 <aside class="notes">
-A grid of screenshots goes here.
+Claude, ChatGPT, Cursor and Codex each render rich output well inside their own app. The limits
+are where it lives: a teammate on another tool can't open it without a public link, and nothing
+lands in the repo unless someone saves it there.
+</aside>
+</section><section>
+<h2 id="what-parley-does">What parley does</h2>
+<ul>
+<li>The agent writes a document as JSON.</li>
+<li>You review it as one page in your browser.</li>
+<li>Your answers go to a JSON file next to the document.</li>
+<li>The agent reads that file, replies and revises.</li>
+</ul>
+<aside class="notes">
+The document is typed: prose, plans, diffs, tables, questions with set options. The page is
+generated from it. The answers file is data, not prose.
+</aside>
+</section><section>
+<h2 id="the-page">The page</h2>
+<p><img src="/parley/_astro/first.DhMR-w0U_PMcJd.webp" alt="The parley page: the contents on the left, the plan in the middle, the conversation on the right" width="1920" height="1200" decoding="async"></p>
+<p class="caption">The contents, the document and the conversation. The top bar counts what is still open.</p>
+<aside class="notes">
+This is the agent's plan for one small feature: email the customer when an order ships. Two
+questions are open, and one of them blocks the work. The contents show where each one is.
+</aside>
+</section><section>
+<h2 id="the-loop">The loop</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#B392F0">parley</span><span style="color:#9ECBFF"> new</span><span style="color:#9ECBFF"> ship-email-plan</span><span style="color:#6A737D">                      # the agent starts a document</span></span>
+<span class="line"><span style="color:#B392F0">parley</span><span style="color:#9ECBFF"> check</span><span style="color:#9ECBFF"> docs/parley/ship-email-plan.json</span><span style="color:#6A737D">   # rejects a broken one, says what to fix</span></span>
+<span class="line"><span style="color:#B392F0">parley</span><span style="color:#9ECBFF"> serve</span><span style="color:#6A737D">                                    # the page, on your machine</span></span>
+<span class="line"><span style="color:#B392F0">parley</span><span style="color:#9ECBFF"> open</span><span style="color:#9ECBFF"> ship-email-plan</span><span style="color:#6A737D">                     # the link to give you</span></span>
+<span class="line"><span style="color:#B392F0">parley</span><span style="color:#9ECBFF"> answers</span><span style="color:#9ECBFF"> ship-email-plan</span><span style="color:#79B8FF"> --wait</span><span style="color:#6A737D">           # waits for what you send</span></span></code></pre>
+<p>The agent runs these. You open a link and review.</p>
+<aside class="notes">
+The skills run this loop for the agent, so you rarely type these yourself. `check` matters most:
+a document that fails it never reaches the page.
+</aside>
+</section><section>
+<h2 id="questions-with-set-options">Questions with set options</h2>
+<p><img src="/parley/_astro/questions.CEJDHl91_Zsd9Tp.webp" alt="Two questions in the conversation pane, each with options, a recommended option and a reason" width="2304" height="878" decoding="async"></p>
+<p class="caption">Each option has a reason. The agent marks one as recommended. A blocking question is listed first.</p>
+<aside class="notes">
+I pick an option instead of writing a paragraph. "None of these, or I have a question" is always
+there, with a note, when the options are wrong.
+</aside>
+</section><section>
+<h2 id="comment-on-any-part">Comment on any part</h2>
+<p><img src="/parley/_astro/thread.NiszJVN1_Z17fb5L.webp" alt="A comment thread on a diff finding: the reviewer’s question and the agent’s reply, marked revised" width="2290" height="1152" decoding="async"></p>
+<p class="caption">A plan step, a diff line, a table cell, a region of an image. The agent replies in the thread and says what it did.</p>
+<aside class="notes">
+Here I asked about the duplicate-email finding. The agent answered, changed the code, and marked
+its reply "revised". The thread stays on the line it is about.
+</aside>
+</section><section>
+<h2 id="code-review">Code review</h2>
+<p><img src="/parley/_astro/diff.CVu4BkEQ_ZEdk8w.webp" alt="A diff with the agent’s finding pinned to line 15" width="1440" height="987" decoding="async"></p>
+<p class="caption">Diffs show the agent's findings on the lines they are about.</p>
+<aside class="notes">
+The same page reviews code: a working tree, a branch, a range or a pull request. Line numbers
+link to the source on GitHub when the document names the repository.
+</aside>
+</section><section>
+<h2 id="line-numbers-link-to-the-code">Line numbers link to the code</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>diff of a pull request      line 15  -&gt;  github.com/&lt;owner&gt;/&lt;repo&gt;/pull/42/files#diff-…R15</span></span>
+<span class="line"><span>diff of a branch or range   old side -&gt;  the file at the base commit</span></span>
+<span class="line"><span>                            new side -&gt;  the file at the head commit</span></span>
+<span class="line"><span>code or finding source      line 15  -&gt;  the file at the document's commit</span></span>
+<span class="line"><span>                            path     -&gt;  the file in your editor</span></span></code></pre>
+<ul>
+<li>Links pin to a commit, so they still point at the right line after the branch moves.</li>
+<li>The editor link works once you set your checkout folder on the page.</li>
+</ul>
+<aside class="notes">
+The agent sets the repository and commit on the document, and the pull request number on the
+diff. From there every number on the page is a link. Click a finding's line and you land on the
+same line in GitHub's Files tab, where you can comment on it.
+</aside>
+</section><section>
+<h2 id="reviewing-a-pull-request">Reviewing a pull request</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#B392F0">/parley:pr-review</span><span style="color:#79B8FF"> 42</span></span></code></pre>
+<ul>
+<li>Reads the PR, its checks and the comments already on it, with <code>gh</code>.</li>
+<li>The page shows what the PR says it does and whether the diff does that, a table of checks with failing ones first, and the diff with findings.</li>
+<li>One question per finding, and a last one: post the review to the PR, or not.</li>
+<li>If you say post, it posts one review comment with the findings you kept, in your words where you changed them.</li>
+<li>It never approves, requests changes, merges or resolves a thread.</li>
+</ul>
+<aside class="notes">
+It does not check the PR out over your work; it reads files through the GitHub API. The posted
+review is one comment, not a comment on each line. `code-review` does the same for a working tree,
+a branch or a range, with no posting.
+</aside>
+</section><section>
+<h2 id="finish-the-review">Finish the review</h2>
+<p><img src="/parley/_astro/finish.DEX6UPyT_lxXbj.webp" alt="The Finish review dialog with Request changes and Approve" width="958" height="569" decoding="async"></p>
+<p class="caption">Approve, or request changes. The verdict goes to the agent with every answer.</p>
+<aside class="notes">
+If a blocking question is still open, the dialog says so and links to it. I can still request
+changes.
+</aside>
+</section><section>
+<h2 id="what-the-agent-reads-back">What the agent reads back</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>$ parley answers ship-email-plan</span></span>
+<span class="line"><span>ship-email-plan (revision 1): verdict approved</span></span>
+<span class="line"><span>  (finished: Ship it behind the 10% flag first.)</span></span>
+<span class="line"><span>questions:</span></span>
+<span class="line"><span>  q-send [blocking] · When should the email be sent?</span></span>
+<span class="line"><span>    answered: From a queued job after the update</span></span>
+<span class="line"><span>  q-resend [high priority] · If tracking changes after shipping, send a second email?</span></span>
+<span class="line"><span>    answered: No, one email per order</span></span>
+<span class="line"><span>waiting for a reply: 0</span></span></code></pre>
+<p>A choice is an option id, not a paragraph.</p>
+<aside class="notes">
+The answers file holds the same thing as JSON: `"q-send": { "selected": ["queue"] }`. The agent
+does not have to interpret my prose to know what I decided.
+</aside>
+</section><section>
+<h2 id="decisions-on-record">Decisions on record</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>docs/parley/discuss-order-cache.json           the question, the options, why each, the recommendation</span></span>
+<span class="line"><span>docs/parley/discuss-order-cache.answers.json   what you chose, who, when, and earlier answers</span></span></code></pre>
+<ul>
+<li>Each answer is an option id, with who chose it and when.</li>
+<li>A changed answer keeps the old one in its history.</li>
+<li>The verdict, the finish summary and every thread are in the same file.</li>
+<li>Commit both files with the code. The decision sits next to what it decided.</li>
+</ul>
+<aside class="notes">
+`/parley:discuss` writes this kind of page: the problem, two to four options with their costs, a
+tradeoffs table and a recommendation. I decide. A year later, the reason for the cache design is in
+the repo, not in a chat log that is gone.
+</aside>
+</section><section>
+<h2 id="export-to-html-and-markdown">Export to HTML and markdown</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#B392F0">parley</span><span style="color:#9ECBFF"> render</span><span style="color:#9ECBFF"> docs/parley/discuss-order-cache.json</span><span style="color:#6A737D">                      # one HTML file</span></span>
+<span class="line"><span style="color:#B392F0">parley</span><span style="color:#9ECBFF"> render</span><span style="color:#9ECBFF"> docs/parley/discuss-order-cache.json</span><span style="color:#79B8FF"> --out</span><span style="color:#9ECBFF"> cache.md</span><span style="color:#6A737D">       # markdown</span></span>
+<span class="line"><span style="color:#B392F0">parley</span><span style="color:#9ECBFF"> check</span><span style="color:#9ECBFF">  docs/parley/discuss-order-cache.json</span><span style="color:#79B8FF"> --export</span><span style="color:#9ECBFF"> cache.md</span><span style="color:#6A737D">    # still matches?</span></span></code></pre>
+<ul>
+<li>The HTML page is one file with nothing to install. It opens in any browser, offline.</li>
+<li>The markdown reads on GitHub, in a PR or in a docs site. Each item keeps its id, so any line maps back to the document.</li>
+<li><code>check --export</code> fails when a saved export no longer matches the document.</li>
+<li><strong>Export</strong> on the page downloads either one with the answers as they are now.</li>
+</ul>
+<aside class="notes">
+This is the step the in-app canvases leave to you. A static page can be reviewed without a server:
+the answers download as a file to hand back to the agent. The markdown has a short header for docs
+tools and hidden item ids, so it is safe to paste into a PR description.
 </aside>
 </section><section>
 <h2 id="why-typed">Why typed</h2>
 <ul>
-<li>A choice is an option id, not a paragraph.</li>
-<li>Answers survive when the agent rewrites the document.</li>
 <li><code>parley check</code> rejects a broken document before you see it.</li>
-<li>The agent edits by item id: <code>get</code>, <code>set</code>, <code>add</code>, <code>remove</code>, <code>move</code>, <code>apply</code>.</li>
-</ul>
-</section><section>
-<h2 id="install-and-agents">Install and agents</h2>
-<ul>
-<li><code>npm i -g @osdlc/parley</code></li>
-<li>No runtime dependencies. Node 22 or later.</li>
-<li>Any agent that can write a JSON file and read one. Skill packs for Claude Code, Cursor and Codex.</li>
-<li>Wrapper skills today: <code>discuss</code>, <code>explain</code>, <code>decision-make</code> and <code>review-pr --page</code>.</li>
+<li>Your answers survive when the agent rewrites the document.</li>
+<li>The agent edits one item by id: <code>get</code>, <code>set</code>, <code>add</code>, <code>remove</code>, <code>move</code>.</li>
+<li>23 block types: plans, diffs, tables, schemas, charts, diagrams and more.</li>
 </ul>
 <aside class="notes">
-The npm line is true only once the package is published.
+When the agent revises, the page updates in place. A question whose text changed shows as
+changed, so I know to look again.
+</aside>
+</section><section>
+<h2 id="how-it-runs-on-your-machine">How it runs on your machine</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>agent: Claude Code, Codex, Cursor or Pi</span></span>
+<span class="line"><span>  |  node parley.mjs &lt;command&gt;</span></span>
+<span class="line"><span>  v</span></span>
+<span class="line"><span>docs/parley/ship-email-plan.json            the document; the agent writes it</span></span>
+<span class="line"><span>docs/parley/ship-email-plan.answers.json    your answers; the server writes them</span></span>
+<span class="line"><span>  ^  reads, watches, writes</span></span>
+<span class="line"><span>parley serve --- 127.0.0.1:4321 ---&gt; the page in your browser</span></span></code></pre>
+<ul>
+<li><code>parley.mjs</code> is the CLI and the server in one file, shipped in the skill’s folder.</li>
+<li>It runs under Node 22+, Bun or Deno. Nothing to install.</li>
+</ul>
+<aside class="notes">
+The skill tells the agent to run `node parley.mjs` from the project root. The page is built into
+the same file, so `serve` needs nothing else. The server only listens on loopback and serves only
+files git tracks.
+</aside>
+</section><section>
+<h2 id="one-round">One round</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>agent                 parley serve               you</span></span>
+<span class="line"><span>new, set, check  --&gt;  writes the document</span></span>
+<span class="line"><span>serve            --&gt;  watches the folder    --&gt;  opens the page</span></span>
+<span class="line"><span>answers --wait        waits</span></span>
+<span class="line"><span>                      saves to answers.json &lt;--  comment, pick options</span></span>
+<span class="line"><span>answers          &lt;--  exits on the send     &lt;--  Finish review</span></span>
+<span class="line"><span>answers --reply  --&gt;  adds the reply        --&gt;  the thread updates</span></span>
+<span class="line"><span>set, add, move   --&gt;  file changes          --&gt;  the page updates in place</span></span></code></pre>
+<aside class="notes">
+While the server runs it is the only writer of the answers file. The agent's replies go through
+it; with no server running, the CLI writes under a lock instead. The page saves with a version
+check, so two tabs, or a tab and the agent, never write over each other. The server records its
+port and token outside the repo, in ~/.local/state/parley/, so the token is never committed.
+</aside>
+</section><section>
+<h2 id="skills-for-common-jobs">Skills for common jobs</h2>
+<ul>
+<li><code>code-review</code>: a working tree, branch or range, with findings.</li>
+<li><code>pr-review</code>: a GitHub pull request. It posts back only when you say so.</li>
+<li><code>discuss</code>: a design question with options, tradeoffs and a recommendation.</li>
+<li><code>plan</code>: a work plan you approve or send back.</li>
+</ul>
+<aside class="notes">
+Each skill writes a parley page for one job, then runs the loop. In Claude Code they run as
+`/parley:pr-review 42` and so on.
+</aside>
+</section><section>
+<h2 id="kept-in-your-repo-shared-from-your-machine">Kept in your repo, shared from your machine</h2>
+<ul>
+<li>The same document and page in Claude Code, Codex, Cursor and Pi. No account.</li>
+<li>Documents and answers are files in your repo. They are kept with the code, with no export step.</li>
+<li><strong>Share</strong> opens the page to your local network behind a token. <strong>Stop sharing</strong> closes it.</li>
+<li>The page exports a static copy, or markdown, to send anywhere.</li>
+</ul>
+<aside class="notes">
+The server binds to loopback by default. A shared link is plain HTTP, and anyone with it can read
+the files the page serves, so use it on a network you trust. Sharing beyond the local network is
+in design, not built.
+</aside>
+</section><section>
+<h2 id="next-sharing-through-a-relay">Next: sharing through a relay</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>your machine                    relay                   reviewer</span></span>
+<span class="line"><span>parley serve  -- encrypted --&gt;  orders and stores  --&gt;  browser viewer</span></span>
+<span class="line"><span>plain files   &lt;-- encrypted --  ciphertext only    &lt;--  key from the link</span></span></code></pre>
+<ul>
+<li><strong>Share on the internet</strong> makes a key, then uploads the document and answers, encrypted.</li>
+<li>The key is in the link after the <code>#</code>. The browser never sends it, so the relay can’t read the review.</li>
+<li>The agent’s commands do not change. Stop sharing, and the review is local again.</li>
+</ul>
+<p class="small">In design. Three relay backends are being built and measured against one spec.</p>
+<aside class="notes">
+The local server stays the source of the files and encrypts at the boundary. The relay numbers
+each change and stores it; it sees which lane a change is on, never its content. Later, a room:
+several people and their own agents in one review, each with their own model. A free room is one
+document with a limited life.
+</aside>
+</section><section>
+<h2 id="install">Install</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#B392F0">claude</span><span style="color:#9ECBFF"> plugin</span><span style="color:#9ECBFF"> marketplace</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> osdlc/parley</span></span>
+<span class="line"><span style="color:#B392F0">claude</span><span style="color:#9ECBFF"> plugin</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> parley@parley</span></span></code></pre>
+<p>Codex, Cursor and Pi packs ship from the same marketplace. Node 22 or later. No runtime
+dependencies.</p>
+<aside class="notes">
+In a Claude Code session it is `/plugin marketplace add osdlc/parley`, then
+`/plugin install parley@parley`. The npm package is not published yet.
 </aside>
 </section><section>
 <h2 id="status">Status</h2>
 <ul>
 <li>Alpha. The file format may change.</li>
 <li>One reviewer at a time.</li>
-<li>Runs on your machine. The server binds to loopback unless you pass <code>--host</code>.</li>
-<li>Sharing a review is in design, not built.</li>
+<li>Sharing beyond your network is in design, not built.</li>
 </ul>
-</section></div></div><script type="module" src="/parley/_astro/Deck.astro_astro_type_script_index_0_lang.YVPsTuo0.js"></script></div><p class="deck-links">Click the deck, then use the arrow keys. <a href="/parley/slides/launch/">Full screen</a></p></section><section><h2>Status</h2><p>Alpha. The file format may change. One reviewer at a time. It runs on your machine, and by default nothing leaves it.</p></section><footer>parley</footer></main></body></html>
+<p class="small">github.com/osdlc/parley</p>
+<aside class="notes">
+Questions and bug reports go to the GitHub repository.
+</aside>
+</section></div></div><script type="module" src="/parley/_astro/Deck.astro_astro_type_script_index_0_lang.DQaHFKfx.js"></script></div><p class="deck-links">Click the deck, then use the arrow keys. <a href="/parley/slides/launch/">Full screen</a></p></section><section><h2>Status</h2><p>Alpha. The file format may change. One reviewer at a time. It runs on your machine, and by default nothing leaves it.</p></section><footer>parley</footer></main></body></html>
