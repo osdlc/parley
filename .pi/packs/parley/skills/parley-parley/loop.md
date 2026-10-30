@@ -45,7 +45,8 @@ running server, token included. Give that link to the reviewer. Never give a lin
 runs. `open --launch` also opens it in the browser.
 
 `serve --host 0.0.0.0` opens the server to the LAN and puts a token in the link. Share that link
-only with people who may read the repo.
+only with people who may read the repo. The reviewer can also do it from the page: **Share** opens
+the page to the local network and gives them the link.
 
 ## Reply to each send
 

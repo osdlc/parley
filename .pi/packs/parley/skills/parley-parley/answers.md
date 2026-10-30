@@ -194,6 +194,9 @@ answers file holds. The skill text, `/skill:parley-parley` and its `loop.md`, sa
 
 ## The answers file
 
+Its JSON Schema (2020-12, version 1, `$id` `urn:parley:schema:answers:1`) is [answers.schema.json](answers.schema.json);
+`node parley.mjs schema --answers` prints it. Validate with it; the format is below.
+
 `<id>.answers.json` sits beside the document. The server writes it; never edit it by hand. Read it
 with `node parley.mjs answers <id>`, which prints the digest. `--json` (or `--output json`) prints
 it as one line of JSON: the answers file's own fields, `revision`, `pending` and `questions`, beside

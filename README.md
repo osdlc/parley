@@ -7,10 +7,23 @@ any part and answers the questions. Their answers land in a JSON file beside the
 agent reads them back and replies.
 
 This repository is the parley plugin marketplace. It holds the built plugin for four agent
-harnesses and nothing else. The plugin has one skill, `parley`. The skill's `parley.mjs` is one
-bundled file that runs under Node 22 or later, bun or deno, with nothing else to install.
+harnesses and nothing else. The skill's `parley.mjs` is one bundled file that runs under Node 22
+or later, bun or deno, with nothing else to install.
 
-Version 0.2.0. The plugin id is `parley@parley`.
+Version 0.2.1. The plugin id is `parley@parley`.
+
+## Skills
+
+| Skill | What it does |
+| --- | --- |
+| `parley` | Check, serve and render any parley document, and read the reviewer's answers back. The others use it. |
+| `code-review` | Review a change (the working tree, a branch or a range) as a diff with findings on its lines. |
+| `pr-review` | Review a GitHub pull request the same way, with its checks. Posts to the PR only when the reviewer says so. |
+| `discuss` | Put a design question to the reviewer: options, tradeoffs, a recommendation and the decision. |
+| `plan` | Write a work plan the reviewer approves or sends back before the work starts. |
+
+In Claude Code a skill runs as `/parley:<skill>`, such as `/parley:pr-review 42`. In Pi it is
+`/skill:parley-<skill>`.
 
 ## Install
 
@@ -51,8 +64,7 @@ git clone https://github.com/osdlc/parley
 pi install ./parley/.pi/packs/parley
 ```
 
-`pi install` records the clone's path, and `pi list` shows it, so keep the clone where it is. In
-Pi, the skill is `/skill:parley-parley`.
+`pi install` records the clone's path, and `pi list` shows it, so keep the clone where it is.
 
 ## What is here
 
