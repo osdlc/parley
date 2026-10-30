@@ -230,6 +230,12 @@ on a box carries `region`: `{ x, y, w, h, page?, image }`, the box in fractions 
 - `seenReplies`: the agent replies the reviewer has seen, by message id, each with when the server
   took the mark. A reply missing from it is new to the reviewer, unless the reviewer wrote later in
   the same thread.
+- `who`: on a comment, a message and an answer, who wrote it: `{ id, name }`, with `agent: true`
+  on the agent's replies. The server stamps it when it first stores the item and keeps it after,
+  so a page cannot change it. On this machine's page it is the person running parley, and the
+  agent's replies are that person's agent. On the network link it is the guest, by the name their
+  browser gave. Items from before it existed have none. The digest names the writers after each
+  pending send, as `from Kim, Sam`.
 - `reviewerAck`, `agentAck`: on a comment or a question's answer, when the reviewer or the agent
   marked the thread seen. A mark counts until the other side writes in the thread after it.
 - `agentReadAt` is set by `--mark-read`. `roundStartedAt` is set by `--new-round`.
