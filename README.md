@@ -10,7 +10,7 @@ This repository is the parley plugin marketplace. It holds the built plugin for 
 harnesses and nothing else. The skill's `parley.mjs` is one bundled file that runs under Node 22
 or later, bun or deno, with nothing else to install.
 
-Version 0.2.1. The plugin id is `parley@parley`.
+Version 0.2.2. The plugin id is `parley@parley`.
 
 ## Skills
 
