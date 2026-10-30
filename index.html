@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>parley</title><meta name="description" content="parley shows an agent's plan as a page. You answer its questions there, and it reads your answers from a file."><link rel="stylesheet" href="/parley/_astro/Deck.B7o53SIo.css"><style>:root{--bg:#fbfbf9;--surface:#f1f1ec;--text:#1c1c1a;--muted:#5d5d57;--line:#dcdcd4;--accent:#2f5fd0;--code-bg:#ecece5;--font-sans:ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;--font-mono:ui-monospace, "SF Mono", Menlo, Consolas, monospace;color-scheme:light dark}@media (prefers-color-scheme:dark){:root{--bg:#141413;--surface:#1e1e1c;--text:#ecece6;--muted:#a3a39b;--line:#34342f;--accent:#7ea2ff;--code-bg:#26262a}}*,:before,:after{box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:var(--font-sans);margin:0;font-size:17px;line-height:1.55}a{color:var(--accent)}code,pre{font-family:var(--font-mono);font-size:.9em}code{background:var(--code-bg);border-radius:4px;padding:.1em .35em}pre{background:var(--code-bg);border-radius:6px;padding:.9em 1.1em;overflow-x:auto}pre code{background:0 0;padding:0}.page{max-width:880px;margin:0 auto;padding:0 16px 96px}.page section{padding:48px 0 0}.page h1{letter-spacing:-.02em;margin:72px 0 16px;font-size:clamp(2.2rem,6vw,3.4rem);line-height:1.1}.page h2{margin:0 0 16px;font-size:1.5rem}.lede{color:var(--muted);margin:0 0 24px;font-size:1.25rem}.steps{padding-left:1.2em}.steps li+li{margin-top:8px}.deck-frame{aspect-ratio:16/9;border:1px solid var(--line);border-radius:8px;overflow:hidden}.deck-links{color:var(--muted);margin-top:8px;font-size:.95rem}footer{border-top:1px solid var(--line);color:var(--muted);margin-top:72px;padding-top:16px;font-size:.95rem}
+</style></head><body><main class="page"><section><h1>parley</h1><p class="lede">parley shows an agent's plan as a page. You answer its questions there, and it reads your answers from a file.</p><pre><code>npm i -g @osdlc/parley</code></pre></section><section><h2>How it works</h2><ol class="steps"><li><strong>Write.</strong> The agent writes a document as JSON.</li><li><strong>Check.</strong><code>parley check</code> rejects a broken document.</li><li><strong>Review.</strong> You comment and answer its questions on one page.</li><li><strong>Read back.</strong> The agent reads your answers from a JSON file and revises.</li></ol></section><section><h2>The deck</h2><div class="deck-frame"><div class="reveal" data-deck data-embedded><div class="slides"><section><h1 id="parley">parley</h1>
+<p>Review your agent’s plans as a page.</p>
+</section><section>
+<h2 id="the-problem">The problem</h2>
+<ul>
+<li>An agent’s plan arrives as long markdown in chat.</li>
+<li>Its questions are buried in the text.</li>
+<li>Your answer goes back as a paragraph the agent has to read.</li>
+<li>Nothing is kept when the session ends.</li>
+</ul>
+<aside class="notes">
+Replace the first bullet with the code review sentence once it is agreed (advantages.md).
+</aside>
+</section><section>
+<h2 id="what-parley-is">What parley is</h2>
+<ul>
+<li>The agent writes a document as JSON. You review it as one page.</li>
+<li>Comment on any part. Answer typed questions.</li>
+<li>Your answers go to a JSON file next to the document.</li>
+</ul>
+</section><section>
+<h2 id="the-loop">The loop</h2>
+<ul>
+<li>The agent writes the document and runs <code>parley check</code>.</li>
+<li><code>parley serve</code> shows the page. <code>parley open</code> prints its link.</li>
+<li>You answer, then press Finish review: Approve or Request changes.</li>
+<li>The agent reads <code>parley answers</code>, replies in a thread and revises. The page updates in place.</li>
+</ul>
+</section><section>
+<h2 id="block-types">Block types</h2>
+<ul>
+<li>20 block types: prose, question, diff, matrix, table, checklist, schema, plan, sequence and flow
+diagrams, and more.</li>
+<li>Prose tones, console and log output, image regions.</li>
+</ul>
+<aside class="notes">
+A grid of screenshots goes here.
+</aside>
+</section><section>
+<h2 id="why-typed">Why typed</h2>
+<ul>
+<li>A choice is an option id, not a paragraph.</li>
+<li>Answers survive when the agent rewrites the document.</li>
+<li><code>parley check</code> rejects a broken document before you see it.</li>
+<li>The agent edits by item id: <code>get</code>, <code>set</code>, <code>add</code>, <code>remove</code>, <code>move</code>, <code>apply</code>.</li>
+</ul>
+</section><section>
+<h2 id="install-and-agents">Install and agents</h2>
+<ul>
+<li><code>npm i -g @osdlc/parley</code></li>
+<li>No runtime dependencies. Node 22 or later.</li>
+<li>Any agent that can write a JSON file and read one. Skill packs for Claude Code, Cursor and Codex.</li>
+<li>Wrapper skills today: <code>discuss</code>, <code>explain</code>, <code>decision-make</code> and <code>review-pr --page</code>.</li>
+</ul>
+<aside class="notes">
+The npm line is true only once the package is published.
+</aside>
+</section><section>
+<h2 id="status">Status</h2>
+<ul>
+<li>Alpha. The file format may change.</li>
+<li>One reviewer at a time.</li>
+<li>Runs on your machine. The server binds to loopback unless you pass <code>--host</code>.</li>
+<li>Sharing a review is in design, not built.</li>
+</ul>
+</section></div></div><script type="module" src="/parley/_astro/Deck.astro_astro_type_script_index_0_lang.YVPsTuo0.js"></script></div><p class="deck-links">Click the deck, then use the arrow keys. <a href="/parley/slides/launch/">Full screen</a></p></section><section><h2>Status</h2><p>Alpha. The file format may change. One reviewer at a time. It runs on your machine, and by default nothing leaves it.</p></section><footer>parley</footer></main></body></html>
