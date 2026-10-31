@@ -1,0 +1,122 @@
+{
+  "id": "ship-email-plan",
+  "title": "Plan: email the customer when an order ships",
+  "summary": "Send one email when an order is marked shipped, with the tracking link. The change is small: a queued job after the status update. Two decisions are open, and one of them blocks the work.",
+  "created": "2026-10-30",
+  "author": {
+    "agent": "claude-code"
+  },
+  "questions": [
+    {
+      "id": "q-send",
+      "prompt": "When should the email be sent?",
+      "kind": "single",
+      "about": "t-enqueue",
+      "priority": "blocking",
+      "recommended": "queue",
+      "options": [
+        {
+          "id": "queue",
+          "title": "From a queued job after the update",
+          "detail": "A slow mail provider never delays marking the order shipped. A failed send is retried."
+        },
+        {
+          "id": "inline",
+          "title": "Inline, before markShipped returns",
+          "detail": "Simpler. A provider outage fails the whole request."
+        }
+      ]
+    },
+    {
+      "id": "q-resend",
+      "prompt": "If tracking changes after shipping, send a second email?",
+      "kind": "single",
+      "about": "t-template",
+      "priority": "high",
+      "recommended": "no",
+      "options": [
+        {
+          "id": "no",
+          "title": "No, one email per order",
+          "detail": "Carriers rarely change numbers. Support can resend by hand."
+        },
+        {
+          "id": "yes",
+          "title": "Yes, with the new link",
+          "detail": "Needs a record of what was sent, to avoid duplicates."
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "id": "why",
+      "type": "prose",
+      "title": "Why",
+      "text": "Customers ask support where their order is. The tracking number is in the order page, but nobody tells them it exists. An email at the moment of shipping answers most of those tickets."
+    },
+    {
+      "id": "work",
+      "type": "plan",
+      "title": "The work",
+      "phases": [
+        {
+          "id": "p-build",
+          "title": "Build",
+          "workstreams": [
+            {
+              "id": "ws-email",
+              "title": "Email",
+              "tasks": [
+                {
+                  "id": "t-template",
+                  "title": "Write the shipped email template"
+                },
+                {
+                  "id": "t-enqueue",
+                  "title": "Queue the email in markShipped"
+                },
+                {
+                  "id": "t-worker",
+                  "title": "Send queued emails, with three retries"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "p-ship",
+          "title": "Ship",
+          "gate": "The two questions above are answered",
+          "workstreams": [
+            {
+              "id": "ws-rollout",
+              "title": "Rollout",
+              "tasks": [
+                {
+                  "id": "t-flag",
+                  "title": "Turn it on for 10% of orders, then all"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "change",
+      "type": "diff",
+      "title": "The change to markShipped",
+      "diff": "diff --git a/src/orders/ship.ts b/src/orders/ship.ts\n--- a/src/orders/ship.ts\n+++ b/src/orders/ship.ts\n@@ -1,12 +1,20 @@\n import { db } from '../db'\n+import { queue } from '../queue'\n \n export async function markShipped(orderId: string, tracking: string) {\n   const order = await db.orders.get(orderId)\n   if (order.status === 'shipped') return order\n \n   const updated = await db.orders.update(orderId, {\n     status: 'shipped',\n     tracking,\n     shippedAt: new Date(),\n   })\n+\n+  await queue.add('ship-email', {\n+    orderId,\n+    to: order.email,\n+    tracking,\n+  })\n   return updated\n }\n",
+      "findings": [
+        {
+          "id": "f-dup",
+          "title": "A retried request can queue two emails",
+          "file": "src/orders/ship.ts",
+          "line": 15,
+          "summary": "The early return covers a second call, but not two calls racing. Use the order id as the job id so the queue drops the duplicate."
+        }
+      ]
+    }
+  ]
+}

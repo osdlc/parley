@@ -1,0 +1,27 @@
+/* The colours and type the site and the decks share. Dark mode follows the system. */
+:root {
+  --bg: #fbfbf9;
+  --surface: #f1f1ec;
+  --text: #1c1c1a;
+  --muted: #5d5d57;
+  --line: #dcdcd4;
+  --accent: #2f5fd0;
+  --code-bg: #ecece5;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141413;
+    --surface: #1e1e1c;
+    --text: #ecece6;
+    --muted: #a3a39b;
+    --line: #34342f;
+    --accent: #7ea2ff;
+    --code-bg: #26262a;
+  }
+}

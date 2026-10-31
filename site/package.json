@@ -1,0 +1,33 @@
+{
+  "name": "@osdlc/parley-site",
+  "version": "0.0.0",
+  "private": true,
+  "description": "parley's site and slide decks: an Astro static site, with decks written in markdown and shown by reveal.js.",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "typecheck": "astro check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "leak-check": "node scripts/leak-check.ts",
+    "check": "pnpm run typecheck && pnpm run format:check && pnpm run build && pnpm run leak-check"
+  },
+  "dependencies": {
+    "astro": "^7.4.4",
+    "reveal.js": "^6.0.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@osdlc/prettier-config": "^0.3.1",
+    "@types/node": "^24.19.2",
+    "prettier-plugin-astro": "^1.1.2",
+    "typescript": "~6.0.3"
+  },
+  "license": "MIT OR Apache-2.0",
+  "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=24"
+  }
+}

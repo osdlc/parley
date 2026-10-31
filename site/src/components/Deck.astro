@@ -1,0 +1,81 @@
+---
+// One deck from src/decks/, shown by reveal.js at 1280×720. `embedded` fits it in a box on a
+// page, takes keys only while it has focus and leaves the URL alone. Without it the deck fills the
+// window, keeps the slide number in the URL hash and opens the speaker view on `s`.
+import { getImage } from 'astro:assets'
+import { getEntry } from 'astro:content'
+
+interface Props {
+  deck: string
+  embedded?: boolean
+}
+
+const { deck, embedded = false } = Astro.props
+const entry = await getEntry('decks', deck)
+if (!entry) throw new Error(`no deck "${deck}" in src/decks/`)
+
+// Every image a deck can use, keyed by its path from this file.
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  '../decks/**/*.{png,jpg,jpeg,webp,avif,gif,svg}',
+  { eager: true },
+)
+
+// A markdown image renders as a placeholder, `<img __ASTRO_IMAGE_="{json}">`, that only
+// `<Content />` fills in. The deck splits the HTML instead, so it fills them in here: the JSON's
+// `src` is relative to the deck's file in src/decks/.
+async function resolveImages(html: string): Promise<string> {
+  const placeholders = [...html.matchAll(/<img __ASTRO_IMAGE_="([^"]*)">/g)]
+  for (const [tag, attr] of placeholders) {
+    const { src, alt } = JSON.parse(attr!.replaceAll('&quot;', '"')) as { src: string; alt: string }
+    const key = `..${new URL(src, 'file:///decks/').pathname}`
+    const image = images[key]
+    if (!image) throw new Error(`deck "${deck}": no image ${src} (looked for ${key})`)
+    const out = await getImage({ src: image.default })
+    const escapedAlt = alt.replaceAll('"', '&quot;')
+    html = html.replace(
+      tag,
+      `<img src="${out.src}" alt="${escapedAlt}" width="${out.attributes.width}" height="${out.attributes.height}" decoding="async">`,
+    )
+  }
+  return html
+}
+
+// The markdown renders to one HTML string. Each `---` in the source is an <hr>, and ends a slide.
+const html = await resolveImages(entry.rendered?.html ?? '')
+const slides = html.split(/<hr\s*\/?>/)
+---
+
+<div class="reveal" data-deck data-embedded={embedded ? '' : undefined}>
+  <div class="slides">
+    {slides.map((html) => (
+      <section set:html={html} />
+    ))}
+  </div>
+</div>
+
+<script>
+  import Reveal from 'reveal.js'
+  import Notes from 'reveal.js/plugin/notes'
+  import 'reveal.js/reveal.css'
+  import '../styles/deck.css'
+
+  for (const el of document.querySelectorAll<HTMLElement>('[data-deck]')) {
+    const embedded = el.hasAttribute('data-embedded')
+    const deck = new Reveal(el, {
+      // 16:9, the shape of the embed box and of most screens.
+      width: 1280,
+      height: 720,
+      embedded,
+      hash: !embedded,
+      keyboardCondition: embedded ? 'focused' : null,
+      plugins: embedded ? [] : [Notes],
+    })
+    // reveal centres each slide when it lays out. An image that loads after that changes the
+    // slide's height, so lay out again.
+    void deck.initialize().then(() => {
+      for (const img of el.querySelectorAll('img')) {
+        if (!img.complete) img.addEventListener('load', () => deck.layout(), { once: true })
+      }
+    })
+  }
+</script>

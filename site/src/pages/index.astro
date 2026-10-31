@@ -1,0 +1,104 @@
+---
+// The landing page: the pitch and install, how a review works, the deck, install for each harness,
+// and the status.
+import Base from '../layouts/Base.astro'
+import Deck from '../components/Deck.astro'
+
+const base = import.meta.env.BASE_URL
+---
+
+<Base
+  title="parley"
+  description="parley shows an agent's plan as a page. You answer its questions there, and it reads your answers from a file."
+>
+  <main class="page">
+    <section>
+      <h1>parley</h1>
+      <p class="lede">
+        parley shows an agent's plan as a page. You answer its questions there, and it reads your
+        answers from a file.
+      </p>
+      <pre><code>claude plugin marketplace add osdlc/parley
+claude plugin install parley@parley</code></pre>
+      <p class="aside">
+        That is Claude Code. <a href="#harnesses">Codex, Cursor and Pi</a> are below.
+      </p>
+    </section>
+
+    <section>
+      <h2>How it works</h2>
+      <ol class="steps">
+        <li>
+          <strong>Write.</strong> The agent writes a document as JSON.
+        </li>
+        <li>
+          <strong>Check.</strong>
+          <code>parley check</code> rejects a broken document.
+        </li>
+        <li>
+          <strong>Review.</strong> You comment and answer its questions on one page.
+        </li>
+        <li>
+          <strong>Read back.</strong> The agent reads your answers from a JSON file and revises.
+        </li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>The deck</h2>
+      <div class="deck-frame">
+        <Deck deck="launch" embedded />
+      </div>
+      <p class="deck-links">
+        Click the deck, then use the arrow keys. <a href={`${base}slides/launch/`}>Full screen</a>
+      </p>
+    </section>
+
+    <section id="harnesses">
+      <h2>Install</h2>
+      <p>
+        One marketplace, osdlc/parley, serves all four harnesses. The plugin id is
+        <code>parley@parley</code>. Node 22 or later, Bun or Deno; nothing else to install.
+      </p>
+
+      <h3>Claude Code</h3>
+      <pre><code>claude plugin marketplace add osdlc/parley
+claude plugin install parley@parley</code></pre>
+      <p>
+        In a session, the same is <code>/plugin marketplace add osdlc/parley</code>, then
+        <code>/plugin install parley@parley</code>. A skill runs as
+        <code>/parley:&lt;skill&gt;</code> in Claude Code.
+      </p>
+
+      <h3>Codex</h3>
+      <pre><code>codex plugin marketplace add osdlc/parley
+codex plugin add parley@parley</code></pre>
+
+      <h3>Cursor</h3>
+      <pre><code>cursor-agent plugin marketplace add https://github.com/osdlc/parley</code></pre>
+      <p>
+        This adds the marketplace to your Cursor account. <code>cursor-agent</code> has no install
+        command: install <code>parley</code> in the Cursor app, which lists the plugins of your
+        marketplaces.
+      </p>
+
+      <h3>Pi</h3>
+      <pre><code>git clone https://github.com/osdlc/parley
+pi install ./parley/.pi/packs/parley</code></pre>
+      <p>
+        Pi installs from a folder and records its path, so keep the clone where it is. Skills run as
+        <code>/skill:parley-&lt;skill&gt;</code>.
+      </p>
+    </section>
+
+    <section>
+      <h2>Status</h2>
+      <p>
+        Alpha. The file format may change. One reviewer at a time. It runs on your machine, and by
+        default nothing leaves it.
+      </p>
+    </section>
+
+    <footer>parley</footer>
+  </main>
+</Base>
