@@ -1,0 +1,6 @@
+# Prettier reads .prettierignore only from the directory it runs in, so the site keeps its own.
+# Build output, Astro's generated types and pnpm's lockfile.
+**/node_modules/
+**/dist/
+.astro/
+pnpm-lock.yaml

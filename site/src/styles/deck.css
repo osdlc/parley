@@ -1,0 +1,104 @@
+/* The decks' theme, in place of a reveal.js theme: the site's tokens on reveal's elements. Rules
+   start at `.reveal .slides` so they win over the site's page styles when a deck is embedded. */
+@import './tokens.css';
+
+.reveal {
+  --r-link-color: var(--accent);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 36px;
+  line-height: 1.4;
+}
+
+.reveal .slides section {
+  text-align: left;
+}
+
+.reveal .slides h1,
+.reveal .slides h2,
+.reveal .slides h3 {
+  margin: 0 0 0.6em;
+  line-height: 1.15;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.reveal .slides h1 {
+  font-size: 2.6em;
+}
+
+.reveal .slides h2 {
+  font-size: 1.6em;
+}
+
+.reveal .slides p,
+.reveal .slides ul,
+.reveal .slides ol {
+  margin: 0 0 0.8em;
+}
+
+.reveal .slides ul,
+.reveal .slides ol {
+  padding-left: 1.1em;
+}
+
+.reveal .slides li + li {
+  margin-top: 0.35em;
+}
+
+.reveal .slides a {
+  color: var(--accent);
+}
+
+.reveal .slides code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--code-bg);
+  padding: 0.05em 0.3em;
+  border-radius: 4px;
+}
+
+.reveal .slides pre {
+  font-size: 0.6em;
+  padding: 0.8em 1em;
+  border-radius: 6px;
+  overflow: auto;
+}
+
+.reveal .slides pre code {
+  background: none;
+  padding: 0;
+}
+
+/* A screenshot slide: the title, the image and a caption fit in 720px. */
+.reveal .slides img {
+  display: block;
+  max-width: 100%;
+  max-height: 520px;
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.reveal .slides p:has(> img) {
+  margin: 0 0 0.4em;
+}
+
+.reveal .slides .caption {
+  font-size: 0.7em;
+  color: var(--muted);
+  text-align: center;
+}
+
+.reveal .slides .small {
+  font-size: 0.65em;
+  color: var(--muted);
+}
+
+.reveal .controls,
+.reveal .progress {
+  color: var(--accent);
+}

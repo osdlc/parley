@@ -1,0 +1,18 @@
+---
+// Every deck in src/decks/ at full window size: /slides/<name>/. Press `s` for the speaker view
+// and add `?print-pdf` to the address to print it to PDF.
+import { getCollection } from 'astro:content'
+import Base from '../../layouts/Base.astro'
+import Deck from '../../components/Deck.astro'
+
+export async function getStaticPaths() {
+  const decks = await getCollection('decks')
+  return decks.map((d) => ({ params: { deck: d.id }, props: { entry: d } }))
+}
+
+const { entry } = Astro.props
+---
+
+<Base title={entry.data.title} description={entry.data.description}>
+  <Deck deck={entry.id} />
+</Base>
