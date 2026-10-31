@@ -26,7 +26,7 @@ answers file holds. The skill text, `/parley:parley` and its `loop.md`, says wha
   new replies, waiting or drafts. It shows only what the reading does not: a step's explanation,
   a table's columns, an operation's lock and rollback. **Questions** holds every question, with
   **Finish review** at its foot; a question block, and an item a question is about, link to it.
-  `group` on a question is a heading on its card. **Whole document** is one running conversation
+  `group` on a question is a heading on its card. **Chat** is one running conversation
   with the agent about the document as a whole, with a message box under it: Enter sends,
   Shift+Enter breaks a line. The first message is a comment whose item id is the document id;
   each later message is a reviewer reply in that thread (the newest sent one, when an older file
@@ -38,7 +38,7 @@ answers file holds. The skill text, `/parley:parley` and its `loop.md`, says wha
 - Click or hover any pane and the others highlight. `j` and `k` step through items. `Tab` also
   reaches every item, and `Enter` opens it. `n` and `p` step through questions; with shift, open
   ones only. `u` steps to new replies. `c` comments on the selected words, or on the selected item
-  when no words are selected. `m` opens the Whole document tab with the focus in its message box.
+  when no words are selected. `m` opens the Chat tab with the focus in its message box.
   `Esc` clears. The URL hash links to an item. `c` and `m` do nothing while a dialog, the
   lightbox or the file viewer is open.
 - `⌘K` on a Mac, `Ctrl+K` elsewhere (or **Search** in the top bar), opens the command palette: one
