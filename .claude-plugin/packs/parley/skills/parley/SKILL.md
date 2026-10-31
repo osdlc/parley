@@ -19,6 +19,8 @@ This skill covers:
 - [The loop](#the-loop): check, serve, listen, hand over the link, reply, new round or render.
 - [Blocks](#blocks): find a block type step by step. `writing.md` has sources and questions.
 - [Revising](writing.md#revising): what to change between rounds.
+- [Repo extension blocks](#repo-extension-blocks): experimental; when parley will not load a
+  repo's blocks. Never run `parley trust`.
 - [Reference](#reference): the files beside this one, and when to read each.
 
 ## What you produce
@@ -97,6 +99,18 @@ result passes `check`.
 read the thread first. `add` and `move` also take `--before <item>`.
 
 `<doc>` is a path or an id in `docs/parley`. `node parley.mjs help ids` explains item ids.
+
+## Repo extension blocks
+
+Repo extension blocks are experimental. A command can print `parley: repo extensions are
+experimental and off`, `parley: not loading the blocks in <config>` or `parley: ignoring <trust
+file>`. The repo's custom blocks are then off, not trusted, changed since, or the trust file cannot
+be used. The built-in blocks work as usual. Loading the custom ones runs the repo's code, and only
+a person decides that. If the document needs a custom block, tell the person the config path and
+the line, and stop. Never run `parley trust`, never edit the trust file, and never
+set `XDG_STATE_HOME`, `PARLEY_EXPERIMENTAL_EXTENSIONS` or `PARLEY_NO_EXTENSIONS` to get past the
+line. Do not swap the custom block for another unless the person says so.
+`node parley.mjs help trust` says what trust covers.
 
 ## Reference
 

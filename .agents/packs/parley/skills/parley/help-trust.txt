@@ -1,0 +1,9 @@
+Repo extensions are experimental and off by default. A person turns them on with
+PARLEY_EXPERIMENTAL_EXTENSIONS=1; PARLEY_NO_EXTENSIONS=1 turns them off whatever else is set.
+A repo's extension blocks run with your rights, so even then they load only for a config a person
+trusted with parley trust. An agent never runs it, edits the record or changes XDG_STATE_HOME:
+it reports the line to a person and waits.
+Trust covers the config and every file in each module's folder but node_modules. Not covered:
+a package a module imports by name, and a file outside the module's folder it imports by ../.
+The record is $XDG_STATE_HOME/parley/trust.json (default ~/.local/state), never in the repo.
+docs/extending.md in the package says how to write an extension block.

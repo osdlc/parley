@@ -178,7 +178,7 @@ test document.
 - **Means**: the part of the page for feedback that is not about one item; its item id is the
   document id. It is one running conversation with the agent: the first message is a comment, the
   rest are replies in it.
-- **Shows as**: page heading "About the whole document" in the Whole document tab, with a message
+- **Shows as**: page heading "About the whole document" in the Chat tab, with a message
   box under it; Answers file `comments[]` with `item: <document id>`. Feedback on the whole document
   that goes with the verdict is the finish summary.
 - **Replaces**: General notes, "Notes" in the contents.
