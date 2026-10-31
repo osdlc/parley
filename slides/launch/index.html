@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>parley</title><meta name="description" content="What parley is and how a review works, in 23 slides."><link rel="stylesheet" href="/parley/_astro/Deck.CJetmhcE.css"><style>:root{--bg:#fbfbf9;--surface:#f1f1ec;--text:#1c1c1a;--muted:#5d5d57;--line:#dcdcd4;--accent:#2f5fd0;--code-bg:#ecece5;--font-sans:ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;--font-mono:ui-monospace, "SF Mono", Menlo, Consolas, monospace;color-scheme:light dark}@media (prefers-color-scheme:dark){:root{--bg:#141413;--surface:#1e1e1c;--text:#ecece6;--muted:#a3a39b;--line:#34342f;--accent:#7ea2ff;--code-bg:#26262a}}*,:before,:after{box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:var(--font-sans);margin:0;font-size:17px;line-height:1.55}a{color:var(--accent)}code,pre{font-family:var(--font-mono);font-size:.9em}code{background:var(--code-bg);border-radius:4px;padding:.1em .35em}pre{background:var(--code-bg);border-radius:6px;padding:.9em 1.1em;overflow-x:auto}pre code{background:0 0;padding:0}.page{max-width:880px;margin:0 auto;padding:0 16px 96px}.page section{padding:48px 0 0}.page h1{letter-spacing:-.02em;margin:72px 0 16px;font-size:clamp(2.2rem,6vw,3.4rem);line-height:1.1}.page h2{margin:0 0 16px;font-size:1.5rem}.lede{color:var(--muted);margin:0 0 24px;font-size:1.25rem}.steps{padding-left:1.2em}.steps li+li{margin-top:8px}.deck-frame{aspect-ratio:16/9;border:1px solid var(--line);border-radius:8px;overflow:hidden}.deck-links{color:var(--muted);margin-top:8px;font-size:.95rem}footer{border-top:1px solid var(--line);color:var(--muted);margin-top:72px;padding-top:16px;font-size:.95rem}
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>parley</title><meta name="description" content="What parley is and how a review works, in 23 slides."><link rel="stylesheet" href="/parley/_astro/Deck.CJetmhcE.css"><style>:root{--bg:#fbfbf9;--surface:#f1f1ec;--text:#1c1c1a;--muted:#5d5d57;--line:#dcdcd4;--accent:#2f5fd0;--code-bg:#ecece5;--font-sans:ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;--font-mono:ui-monospace, "SF Mono", Menlo, Consolas, monospace;color-scheme:light dark}@media (prefers-color-scheme:dark){:root{--bg:#141413;--surface:#1e1e1c;--text:#ecece6;--muted:#a3a39b;--line:#34342f;--accent:#7ea2ff;--code-bg:#26262a}}*,:before,:after{box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:var(--font-sans);margin:0;font-size:17px;line-height:1.55}a{color:var(--accent)}code,pre{font-family:var(--font-mono);font-size:.9em}code{background:var(--code-bg);border-radius:4px;padding:.1em .35em}pre{background:var(--code-bg);border-radius:6px;padding:.9em 1.1em;overflow-x:auto}pre code{background:0 0;padding:0}.page{max-width:880px;margin:0 auto;padding:0 16px 96px}.page section{padding:48px 0 0}.page h1{letter-spacing:-.02em;margin:72px 0 16px;font-size:clamp(2.2rem,6vw,3.4rem);line-height:1.1}.page h2{margin:0 0 16px;font-size:1.5rem}.lede{color:var(--muted);margin:0 0 24px;font-size:1.25rem}.aside{color:var(--muted);margin:8px 0 0;font-size:.95rem}.page h3{margin:28px 0 8px;font-size:1.1rem}.steps{padding-left:1.2em}.steps li+li{margin-top:8px}.deck-frame{aspect-ratio:16/9;border:1px solid var(--line);border-radius:8px;overflow:hidden}.deck-links{color:var(--muted);margin-top:8px;font-size:.95rem}footer{border-top:1px solid var(--line);color:var(--muted);margin-top:72px;padding-top:16px;font-size:.95rem}
 </style></head><body><div class="reveal" data-deck><div class="slides"><section><h1 id="parley">parley</h1>
 <p>Review your agent’s work on a page, not in chat.</p>
 <p class="small">Alpha · runs on your machine · Claude Code, Codex, Cursor and Pi</p>
@@ -264,13 +264,25 @@ document with a limited life.
 </aside>
 </section><section>
 <h2 id="install">Install</h2>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#B392F0">claude</span><span style="color:#9ECBFF"> plugin</span><span style="color:#9ECBFF"> marketplace</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> osdlc/parley</span></span>
-<span class="line"><span style="color:#B392F0">claude</span><span style="color:#9ECBFF"> plugin</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> parley@parley</span></span></code></pre>
-<p>Codex, Cursor and Pi packs ship from the same marketplace. Node 22 or later. No runtime
-dependencies.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#6A737D"># Claude Code</span></span>
+<span class="line"><span style="color:#B392F0">claude</span><span style="color:#9ECBFF"> plugin</span><span style="color:#9ECBFF"> marketplace</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> osdlc/parley</span></span>
+<span class="line"><span style="color:#B392F0">claude</span><span style="color:#9ECBFF"> plugin</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> parley@parley</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Codex</span></span>
+<span class="line"><span style="color:#B392F0">codex</span><span style="color:#9ECBFF"> plugin</span><span style="color:#9ECBFF"> marketplace</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> osdlc/parley</span></span>
+<span class="line"><span style="color:#B392F0">codex</span><span style="color:#9ECBFF"> plugin</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> parley@parley</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Cursor: add the marketplace, then install parley in the Cursor app</span></span>
+<span class="line"><span style="color:#B392F0">cursor-agent</span><span style="color:#9ECBFF"> plugin</span><span style="color:#9ECBFF"> marketplace</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> https://github.com/osdlc/parley</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Pi: install from a clone, and keep the clone where it is</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> clone</span><span style="color:#9ECBFF"> https://github.com/osdlc/parley</span></span>
+<span class="line"><span style="color:#B392F0">pi</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> ./parley/.pi/packs/parley</span></span></code></pre>
+<p class="small">One marketplace for all four. Node 22+, Bun or Deno; nothing else to install.</p>
 <aside class="notes">
 In a Claude Code session it is `/plugin marketplace add osdlc/parley`, then
-`/plugin install parley@parley`. The npm package is not published yet.
+`/plugin install parley@parley`. `cursor-agent` has no install command, so the last step in Cursor
+is in the app. Pi records the clone's path. The npm package is not published yet.
 </aside>
 </section><section>
 <h2 id="status">Status</h2>
