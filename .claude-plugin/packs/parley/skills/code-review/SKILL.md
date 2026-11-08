@@ -53,11 +53,12 @@ and the head commit. `examples/code/review-diff.json` in the parley skill folder
 
 1. A `prose` block: what the change does, in two or three sentences; what you checked; the count of
    findings by severity; and your overall view.
-2. A `diff` block with the whole diff, `base` and `head`, `severities` set to `{"minor": "warn"}`
+2. A `diff` block with the whole diff, `severities` set to `{"minor": "warn"}`
    so minor findings stand out from nits, and the findings, each anchored to its
    `file` and `line`. The line is a new-side line inside a hunk of that file; a problem outside
    every hunk goes in the summary. `node parley.mjs block diff --field findings.<name>` explains
-   one field of a finding.
+   one field of a finding. `base` and `head` must each be a commit sha or a ref name, or `check`
+   fails. When you review the working tree, set `base` to the `HEAD` sha and leave `head` out.
 3. A `question` block with one `single` question per blocker or major finding, with options `fix`
    ("Fix"), `other` ("Fix differently: say how in a comment") and `leave` ("Leave it"), and your
    recommendation set. Name the finding's title in the prompt. Minor findings and nits need

@@ -29,8 +29,8 @@ answers file holds. The skill text, `/skill:parley-parley` and its `loop.md`, sa
   `group` on a question is a heading on its card. **Chat** is one running conversation
   with the agent about the document as a whole, with a message box under it: Enter sends,
   Shift+Enter breaks a line. The first message is a comment whose item id is the document id;
-  each later message is a reviewer reply in that thread (the newest sent one, when an older file
-  has several). A comment that quotes words is not part of it. The agent reads it in `answers`,
+  each later message is a reviewer reply in that thread (the newest sent one, when there are
+  several). A comment that quotes words is not part of it. The agent reads it in `answers`,
   marked "(the whole document)" (`whole: true` in JSON), and answers with `--reply <thread id>`;
   `--wait` wakes on each new message. The Finish review summary ends the conversation as the
   reviewer's message with the verdict. The comment box serves the items; it opens at the top of
@@ -229,9 +229,7 @@ on a box carries `region`: `{ x, y, w, h, page?, image }`, the box in fractions 
   `selector` holding the exact words. On a box drawn on an image the `selector` is a
   `FragmentSelector` whose `value` is `xywh=percent:x,y,w,h` (`page=N&` first on a PDF page), and
   `src` is the image's path (from the document folder for `x/…`, else from the repo root) when the
-  item is not the image's own figure. `box` is where the reviewer moved the comment box, as
-  `dx` and `dy` in pixels from the words; the page shows the comment there when the words are
-  hovered. A comment with no `box` uses the default place.
+  item is not the image's own figure.
 - `choices`: the answer to each question, keyed by question id. It holds the chosen options, a
   note or an ask back, the thread, and earlier answers.
 - `replies`: the thread under a comment or a question. The agent's replies carry `action`
@@ -244,7 +242,7 @@ on a box carries `region`: `{ x, y, w, h, page?, image }`, the box in fractions 
   on the agent's replies. The server stamps it when it first stores the item and keeps it after,
   so a page cannot change it. On this machine's page it is the person running parley, and the
   agent's replies are that person's agent. On the network link it is the guest, by the name their
-  browser gave. Items from before it existed have none. The digest names the writers after each
+  browser gave. An item may have none: an agent change with no owner, or a static page. The digest names the writers after each
   pending send, as `from Kim, Sam`.
 - `reviewerAck`, `agentAck`: on a comment or a question's answer, when the reviewer or the agent
   marked the thread seen. A mark counts until the other side writes in the thread after it.

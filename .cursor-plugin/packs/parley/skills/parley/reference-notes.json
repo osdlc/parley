@@ -346,8 +346,8 @@
       "about": "A unified diff with review findings anchored to its lines. One item per finding. A finding is a part of the diff, so a question about one names the finding id in `about`.",
       "fields": {
         "diff": "The diff text, as `git diff` or `gh pr diff` prints it. Every hunk needs its `@@ -a,b +c,d @@` header: `a` and `c` are the first line numbers on the old and new side, `b` and `d` count the lines that follow (context and `-` lines for `b`, context and `+` lines for `d`). Lines before a header do not show and a finding cannot anchor to them. If you have no real numbers, write `@@ -1,N +1,M @@` and count `line` from 1.",
-        "base": "The commit or ref the diff starts from, for example `main`. With a document `repo` and no `pr`, old-side line numbers link to the file at it. Write a commit sha: a branch moves, so its links drift or break. A label that is not a commit or ref name warns and leaves those lines unlinked.",
-        "head": "The commit or ref the diff ends at. With a document `repo` and no `pr`, new-side line numbers link to the file at it (else at `repo.commit`). Write a commit sha: a branch moves, so its links drift or break. A label that is not a commit or ref name warns, and those lines link at `repo.commit`.",
+        "base": "The commit or ref the diff starts from, for example `main`. With a document `repo` and no `pr`, old-side line numbers link to the file at it. Write a commit sha: a branch moves, so its links drift or break. Anything else fails `check`.",
+        "head": "The commit or ref the diff ends at. With a document `repo` and no `pr`, new-side line numbers link to the file at it (else at `repo.commit`). Write a commit sha: a branch moves, so its links drift or break. Anything else fails `check`.",
         "pr": "The pull request number the diff is from. With a GitHub `repo`, each line number links to that line in the pull request's file diff, and the markdown export links the pull request.",
         "findings": "The findings. The key is required, but the list may be empty: the diff then shows with no findings.",
         "findings[].title": "The finding, in a few words.",
