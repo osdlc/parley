@@ -365,7 +365,7 @@
       }
     },
     "checklist": {
-      "about": "Items with a state: acceptance criteria, a checklist, or progress per milestone. Give `items` for a flat list, or `groups` for a bar per group and a total. One item per group and per item. The agent sets each state; the reviewer comments on an item or a group (in `progress` layout, on a group only). A group bar shows the weighted share of its items that are done, in whole percent; `skip` items are left out, and 100% shows only when every counted item is done. The bar also shows `doing` and `blocked` shares, and the state word is always printed, so no state is colour alone.",
+      "about": "Items with a state: acceptance criteria, a checklist, a shared todo list, a board, or progress per milestone. Give `items` for a flat list, or `groups` for a bar per group and a total. One item per group and per item. The agent sets each state with `parley set <doc> <item> state=<state>`. On a served page a reader also sets an item's state from its chip: the state is saved in the answers file with who set it, every reader sees it, and `parley answers` lists it until the document holds it. The reviewer comments on an item or a group (in `progress` layout, on a group only). A group bar shows the weighted share of its items that are done, in whole percent; `skip` items are left out, and 100% shows only when every counted item is done. The bar also shows `doing` and `blocked` shares, and the state word is always printed, so no state is colour alone.",
       "fields": {
         "items[].title": "What must hold or be done.",
         "items[].state": "`todo`, `doing`, `done`, `blocked` or `skip`. Default `todo`.",
@@ -386,7 +386,7 @@
         "groups[].title": "The group name.",
         "groups[].items": "The items in the group, with the same fields as `items`. At least one.",
         "groups[].target": "A target date, `YYYY-MM-DD`.",
-        "layout": "`list` or `progress`. Default `list`. `progress` shows only a bar per group, with no item rows, so only groups can be commented on in the page (the items still have ids for `get`, `set` and `add`); it needs `groups`."
+        "layout": "`list`, `progress` or `board`. Default `list`. `progress` shows only a bar per group, with no item rows, so only groups can be commented on in the page (the items still have ids for `get`, `set` and `add`); it needs `groups`. `board` shows a column per state (todo, doing, blocked, done) with a card per item: its title, owner and evidence, and its group as a chip; `skip` items fold below the columns. With `groups` a board also shows the bar of each group and the total."
       }
     },
     "metrics": {

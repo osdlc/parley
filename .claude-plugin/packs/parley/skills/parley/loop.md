@@ -60,6 +60,12 @@ Each send prints as `[<kind>] <thread id> on <item id>`, then the reviewer's wor
   `--action declined` and say why.
 - Then start the listener again. A `--wait` that returns at once means a send is still pending.
 
+A `[state] <item>: todo → done, by Kim` line is a checklist state a reader set on the page. Every
+reader already sees it. Write it into the document with
+`node parley.mjs set <doc> <item> state=done`; it waits until the document holds that state or you
+set another. For a shared todo list or progress board, use a `checklist` block with
+`layout: board`; `node parley.mjs block checklist` shows it.
+
 Answers to questions reach you with the verdict, not one by one. An ask back or a note beside a
 chosen option reaches you at once, as `[ask]` or `[note]`. A `[reopen]` is handled in
 [writing.md](writing.md#reopened-questions).

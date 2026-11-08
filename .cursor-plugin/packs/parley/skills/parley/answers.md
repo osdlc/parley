@@ -146,6 +146,7 @@ answers file holds. The skill text, `/parley` and its `loop.md`, says what to do
 | Presses **Reopen question** | `[reopen] <question id> on <question id>` | at once |
 | Chooses options, or answers a free-text question | nothing | with the verdict |
 | Presses **Finish review** | `[verdict] changes-requested` or `[verdict] approved` | at once |
+| Sets a checklist item's state from its chip | a line under "checklist states readers set" | at once |
 
 - A thread is a sent comment, ask back, note or reopen, with every reply under it. "Reply to each
   send" in `loop.md` says which id `--reply` takes.
@@ -191,6 +192,15 @@ answers file holds. The skill text, `/parley` and its `loop.md`, says what to do
 - A reopen is settled by an agent reply after it, and then one of these: the next revision after
   that reply, or, on a question that was not closed, a new answer from the reviewer. A revision
   with no reply after the reopen does not settle it.
+
+- **Checklist states.** On a served page each checklist item's state chip is a button. It opens a
+  menu of the five states, by glyph and word. The choice is saved at once in `checks` and shows to
+  every reader: the server lays it over the document before it renders the page, so the bars, the
+  board's columns and the counts follow it, and the chip's tooltip says who set it. The agent's
+  digest lists each state the document does not hold yet, with the `parley set <doc> <item>
+  state=<state>` that writes it in. Once the agent writes any state into the document, that state
+  shows: a reader's state holds only while the document keeps the state it replaced. A static page
+  shows the states as text.
 
 ## The answers file
 
@@ -238,6 +248,11 @@ on a box carries `region`: `{ x, y, w, h, page?, image }`, the box in fractions 
   pending send, as `from Kim, Sam`.
 - `reviewerAck`, `agentAck`: on a comment or a question's answer, when the reviewer or the agent
   marked the thread seen. A mark counts until the other side writes in the thread after it.
+- `checks`: the checklist states readers set, keyed by item id: `{ state, from, at, who }`, with
+  earlier ones in `history`. `from` is the state the document held when the reader set it; the
+  server fills it in, with `at` and `who`. The page shows `state` while the document still holds
+  `from`. `--json` lists the ones the document does not hold yet as `stateChanges`:
+  `{ item, state, from, at, by }`.
 - `agentReadAt` is set by `--mark-read`. `roundStartedAt` is set by `--new-round`.
 - `settings`: the reviewer's settings for this document. `intro` is when the first-visit card was
   closed; while it is set, the card stays closed.

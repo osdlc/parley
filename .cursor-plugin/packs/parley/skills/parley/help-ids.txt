@@ -17,6 +17,8 @@ Each edit command is one op on one item:
   parley remove <doc> <item> [--force]
   parley move <doc> <item> --after|--before|--in <item>
   parley apply <doc> <ops.json|->   a JSON list of ops, each on the result of the one before
+A checklist item's state is one set: parley set <doc> <item> state=done (todo, doing, done,
+blocked or skip). States readers set on the page are listed by parley answers until written in.
 The ops apply takes ("list" picks the parent's list; "parent" on doc.move puts it last there):
   {"kind":"doc.set","item":"q-store","path":"prompt","value":"Where?"}
   {"kind":"doc.add","item":"sort","parent":"query","after":"filter","value":{"title":"Sort"}}
