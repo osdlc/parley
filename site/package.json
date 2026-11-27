@@ -27,7 +27,7 @@
     "typescript": "~6.0.3"
   },
   "license": "MIT OR Apache-2.0",
-  "packageManager": "pnpm@10.28.0",
+  "packageManager": "pnpm@10.34.5",
   "engines": {
     "node": ">=24"
   }
